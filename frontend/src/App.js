@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Signup';
+import {ToastContainer} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
     return (
@@ -14,6 +18,7 @@ function App() {
 
                     </Routes>
             </Router>
+            <ToastContainer />
         </AuthProvider>
     );
 }

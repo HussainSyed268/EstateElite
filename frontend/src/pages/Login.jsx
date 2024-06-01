@@ -1,20 +1,46 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import {toast} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Login = () => {
+    const generateError = (err) => {
+        toast.error(err, {
+            position: "bottom-right",
+        });
+    }
+    const generateSuccess = (msg) => {
+        toast.success(msg, {
+            position: "bottom-right",
+        });
+    }
+
     const { login } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!username || !password) {
+            generateError("Please fill in all fields");
+            return;
+        }
         try {
             await login(username, password);
+            if (localStorage.getItem('token')) {
+                generateSuccess("Logged in successfully");
+                setTimeout(() => {
+                    window.location = '/';
+                }
+                , 1500);
+    
+            }
             // window.location = '/';
         } catch (error) {
-            setError('Invalid username or password');
+            generateError("Invalid username or password");
         }
     };
 
@@ -35,9 +61,6 @@ const Login = () => {
                             sign up
                         </Link>
                     </div>
-
-
-                    {error && <p className="mt-2 text-red-600">{error}</p>}
 
                     <div className="relative flex items-center mt-8">
                         <span className="absolute">
@@ -82,6 +105,7 @@ const Login = () => {
                     </div>
                 </form>
             </div>
+            
         </section>
     );
 }

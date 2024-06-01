@@ -1,26 +1,45 @@
 import React, { useState,useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import {toast} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
+
+    const generateError = (err) => {
+        toast.error(err, {
+            position: "bottom-right",
+        });
+    }
+    const generateSuccess = (msg) => {
+        toast.success(msg, {
+            position: "bottom-right",
+        });
+    }
+
     const { register } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            generateError("Passwords do not match");
             return;
         }
+        if (!username || !email || !password || !confirmPassword) {
+            generateError("Please fill in all fields");
+            return;
+        }
+
 
         try {
             await register(username, email, password);
         } catch (error) {
-            setError('Sign-up failed');
+            generateError("Sign-up failed");
         }
     };
 
@@ -41,8 +60,6 @@ const SignUp = () => {
                             sign up
                         </Link>
                     </div>
-
-                    {error && <p className="mt-2 text-red-600">{error}</p>}
 
                     <div className="relative flex items-center mt-8">
                         <span className="absolute">
