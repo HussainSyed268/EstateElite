@@ -1,10 +1,17 @@
+import Navbar from "./components/Navbar";
+import HomeSection from "./components/HomeSection";
+import PropertyCarousel from "./components/PropertyCarousel";
+import AboutUs from "./components/AboutUs";
+
 
 function App() {
   return (
     <div className="App">
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <Navbar/>
+    <HomeSection/>
+    <PropertyCarousel/>
+    <AboutUs/>
+  
     </div>
   );
 }
