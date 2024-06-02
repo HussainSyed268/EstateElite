@@ -11,6 +11,8 @@ module.exports = {
     },
     fontFamily: {
       roboto: ['Roboto', 'sans-serif'],
+      'raleway': ['Raleway', 'sans-serif'],
+      'philosopher': ['Philosopher', 'sans-serif'],
     },
   },
   plugins: [require("daisyui")],

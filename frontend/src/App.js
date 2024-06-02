@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import HomeSection from "./components/HomeSection";
 import PropertyCarousel from "./components/PropertyCarousel";
 import AboutUs from "./components/AboutUs";
+import Mission from "./components/Mission";
 
 
 function App() {
@@ -9,8 +10,10 @@ function App() {
     <div className="App">
     <Navbar/>
     <HomeSection/>
-    <PropertyCarousel/>
     <AboutUs/>
+    <PropertyCarousel/>
+    <Mission/>  
+    
   
     </div>
   );

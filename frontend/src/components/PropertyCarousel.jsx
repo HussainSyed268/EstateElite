@@ -5,11 +5,12 @@ import Property1 from "../assets/property1.jpg";
 export default function PropertyCarousel() {
     return (
         <>
-            <div className="mt-12 flex flex-col justify-center items-center">
-                <h1 className="text-3xl font-semibold text-center my-10 text-[#242424]">
+            <div className="mt-12 flex flex-col justify-start items-start">
+                <h1 className="text-3xl font-raleway font-semibold my-10 ml-20 text-[#242424]">
                     Top Rated Properties
                 </h1>
-                <div className="carousel-center carousel flex items-center justify-center w-2/3 mx-4 space-x-5 py-5">
+               
+                <div className="carousel-center carousel rounded-box w-full space-x-8 mb-32  overflow-x-scroll px-20">
                     <div className=" min-w-[300px] flex-shrink-0 carousel-item">
                         <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" />
                     </div>
@@ -23,6 +24,7 @@ export default function PropertyCarousel() {
                         <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" />
                     </div>
                 </div>
+              
             </div>
         </>
     );

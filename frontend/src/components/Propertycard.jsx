@@ -3,7 +3,7 @@ import React from "react";
 export default function PropertyCard(props){
     return(
         <>
-        <div className="z-10 card w-[35rem] bg-base-100 shadow-xl">
+        <div className="z-10 card w-[35rem] bg-base-100 shadow-lg mb-4">
         <figure><img src={props.img} alt="Shoes" /></figure>
         <div className="card-body">
             <h2 className="card-title">

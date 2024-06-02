@@ -7,7 +7,7 @@ export default function Navbar() {
         <nav className={`relative flex justify-between items-center font-roboto z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
             <div className="logo font-bold mx-10">
                 <h1 className="text-[1.25rem]">
-                    HomeTour
+                    BricksReal
                 </h1>
             </div>
             <div className="flex lg:hidden mx-10">
