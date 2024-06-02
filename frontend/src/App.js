@@ -1,16 +1,9 @@
-import Navbar from "./components/Navbar";
-import HomeSection from "./components/HomeSection";
-import PropertyCarousel from "./components/PropertyCarousel";
-import AboutUs from "./components/AboutUs";
-
+import AdminPanel from './pages/AdminPanel'
 
 function App() {
   return (
     <div className="App">
-    <Navbar/>
-    <HomeSection/>
-    <PropertyCarousel/>
-    <AboutUs/>
+      <AdminPanel/>
   
     </div>
   );
