@@ -2,7 +2,7 @@ import React from 'react';
 
 const Mission = () => {
     return (
-        <div className={"mb-6 h-full w-[97%] mx-auto"}>
+        <div className={"mb-20 h-full w-[97%] mx-auto"}>
         <div
           className={"rounded-2xl bg-no-repeat bg-center bg-cover w-full"}
           style={{

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-
+import Logo from "../assets/logo.png";
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <nav className={`relative flex justify-between items-center font-roboto z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
             <div className="logo font-bold mx-10">
-                <h1 className="text-[1.25rem]">
-                    BricksReal
-                </h1>
+                <a href="/">
+                    <img src={Logo} alt="logo" className="w-[180px]" />
+                </a>
             </div>
             <div className="flex lg:hidden mx-10">
                 <button onClick={() => setIsOpen(!isOpen)} className="absolute m-4 top-0 right-0 text-[#242424] focus:outline-none">

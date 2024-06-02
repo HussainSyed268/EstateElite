@@ -3,6 +3,7 @@ import HomeSection from "./components/HomeSection";
 import PropertyCarousel from "./components/PropertyCarousel";
 import AboutUs from "./components/AboutUs";
 import Mission from "./components/Mission";
+import Footer from "./components/Footer";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <AboutUs/>
     <PropertyCarousel/>
     <Mission/>  
+    <Footer/>
     
   
     </div>

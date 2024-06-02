@@ -8,7 +8,7 @@ export default function PropertyCard(props){
         <div className="card-body">
             <h2 className="card-title">
                 {props.title}
-            <div className="badge badge-secondary">NEW</div>
+            <div className="badge bg-[#F9A826] text-white">NEW</div>
             </h2>
             <p>{props.description}</p>
             <div className="card-actions justify-end">

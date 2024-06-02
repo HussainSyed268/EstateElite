@@ -7,7 +7,7 @@ import AboutCard from "./AboutCard";
 export default function AboutUs() {
     return (
         <>
-            <div className="font-raleway my-32 text-[#242424]">
+            <div className="font-raleway mt-32 mb-20 text-[#242424]">
             <h1 className="text-xl  mb-4 mx-8 font-semibold text-slate-500  text-center">
                     Finding home never been this easy
                 </h1>
