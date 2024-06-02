@@ -4,7 +4,7 @@ import Cart from '../assets/icons/cart.png';
 export default function AdminCards(props) {
     return(
         <>
-           <div className="rounded-lg w-1/5  ml-5 mt-4 border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark shadow-md">
+           <div className="rounded-lg w-[23%] mx-1 mt-4 border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark shadow-md">
               <div className="ml-6">
 
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black dark:bg-meta-4">
