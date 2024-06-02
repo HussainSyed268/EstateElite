@@ -1,12 +1,26 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login';
+import Register from './pages/Signup';
+import {ToastContainer} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
-  return (
-    <div className="App">
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                    <Routes>
+                        <Route path="/login" element={<Login/>} />
+                        <Route path="/signup" element={<Register/>} />
+
+                    </Routes>
+            </Router>
+            <ToastContainer />
+        </AuthProvider>
+    );
 }
 
 export default App;
