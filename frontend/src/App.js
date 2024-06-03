@@ -1,24 +1,26 @@
-import Navbar from "./components/Navbar";
-import HomeSection from "./components/HomeSection";
-import PropertyCarousel from "./components/PropertyCarousel";
-import AboutUs from "./components/AboutUs";
-import Mission from "./components/Mission";
-import Footer from "./components/Footer";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login';
+import Register from './pages/Signup';
+import {ToastContainer} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
-  return (
-    <div className="App">
-    <Navbar/>
-    <HomeSection/>
-    <AboutUs/>
-    <PropertyCarousel/>
-    <Mission/>  
-    <Footer/>
-    
-  
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                    <Routes>
+                        <Route path="/login" element={<Login/>} />
+                        <Route path="/signup" element={<Register/>} />
+
+                    </Routes>
+            </Router>
+            <ToastContainer />
+        </AuthProvider>
+    );
 }
 
 export default App;

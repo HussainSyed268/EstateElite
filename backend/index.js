@@ -1,50 +1,19 @@
 const express = require('express');
+const { sequelize,connectToDb  } = require('./config/database');
+const bodyParser = require('body-parser');
+const routes = require('./routes');
+const cors = require('cors') 
+
 const app = express();
-const port = 4000;
-
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password : 'root',
-    database : 'tour'
-
-});
-
-connection.connect(
-    (err) => {
-        if(err) {
-            console.log(err);
-        } else {
-            console.log('connected to database');
-        }
-    }
-
-);
-
-app.get('/insert', (req, res) => {
-    const {name, location, price} = req.query;
-    const INSERT_TOUR_QUERY = `INSERT INTO properties (name, location, type) VALUES('DHA villa', 'DHA Lahore', 'Bungalow')`;
-    connection.query(INSERT_TOUR_QUERY, (err, results) => {
-        if(err) {
-            console.log(err);
-        } else {
-            console.log('successfully added tour');
-        }
-    });
-}
-);
-
-    
+app.use(cors()); 
+const port = 5000;
 
 
+app.use(bodyParser.json());
+app.use('/api', routes);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-    }
-);
-
-app.listen(port, () => {
+app.listen(port, async() => {
     console.log(`Example app listening at http://localhost:${port}`);
+    await connectToDb();
     }
 );
