@@ -4,7 +4,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className={`relative flex justify-between items-center font-roboto z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
+        <nav className={`relative flex justify-between items-center font-raleway z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
             <div className="logo font-bold mx-10">
                 <a href="/">
                     <img src={Logo} alt="logo" className="w-[180px]" />
@@ -21,16 +21,16 @@ export default function Navbar() {
             <div className={`flex-col lg:flex-row lg:flex lg:items-center ${isOpen ? "flex" : "hidden"} lg:space-x-5 mx-10`}>
                 <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-5 z-10">
                     <li>
-                        <a href="#" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Home</a>
+                        <a href="/" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Home</a>
                     </li>
                     <li>
-                        <a href="#" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">Find Property</a>
+                        <a href="/find" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">Find Property</a>
                     </li>
                     <li>
-                        <a href="#" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">About</a>
+                        <a href="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">About</a>
                     </li>
                     <li>
-                        <a href="#" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</a>
+                        <a href="/contact" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</a>
                     </li>
                 </ul>
                 </div>
