@@ -3,7 +3,7 @@ import React from "react";
 export default function PropertyCard(props){
     return(
         <>
-        <div className="z-10 card w-[35rem] bg-base-100 shadow-lg mb-4">
+        <div className="z-10 card w-[35rem] bg-base-100 shadow-lg mb-4 font-raleway">
         <figure><img src={props.img} alt="Shoes" /></figure>
         <div className="card-body">
             <h2 className="text-[1.75rem] flex justify-between card-title">
@@ -15,10 +15,14 @@ export default function PropertyCard(props){
                     <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">4.95</p>
                 </div>
             </h2>
+            
+            <div className="card-actions justify-between">
             <p className="text-stone-500">{props.description}</p>
-            <div className="card-actions justify-end">
-            <div className="badge badge-outline">Villa</div> 
-            <div className="badge badge-outline">Luxury</div>
+            <div className="badge badge-outline">{props.type}</div> 
+            </div>
+            <div className="mt-4 justify-between flex">
+            <h1 className="text-[1.75rem] font-bold">Rs {props.price}</h1>
+            <button class="active:scale-95 rounded-full  px-6  hover:text-white border border-slate-300 hover:bg-black transition-all py-2 font-raleway font-medium text-black outline-none focus:ring hover:opacity-90">Buy Now</button>
             </div>
         </div>
         </div>

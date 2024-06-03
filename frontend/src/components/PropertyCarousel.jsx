@@ -12,16 +12,16 @@ export default function PropertyCarousel() {
                
                 <div className="carousel-center carousel rounded-box w-full space-x-8 mb-20  overflow-x-scroll px-20">
                     <div className=" min-w-[300px] flex-shrink-0 carousel-item">
-                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" />
+                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" price="100,000" type="House"/>
                     </div>
                     <div className="min-w-[300px] flex-shrink-0 carousel-item">
-                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" />
+                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" price="100,00,00" type="House"/>
                     </div>
                     <div className="min-w-[300px] flex-shrink-0 carousel-item">
-                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" />
+                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" price="100,00,00" type="House"/>
                     </div>
                     <div className="min-w-[300px] flex-shrink-0 carousel-item">
-                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" />
+                        <PropertyCard img={Property1} title="Villa" description="Beautiful villa with a pool" price="100,00,00" type="House"/>
                     </div>
                 </div>
               
