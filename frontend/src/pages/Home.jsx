@@ -10,7 +10,7 @@ function Home() {
         <>
         <HomeSection/>
         <AboutUs/>
-        <PropertyCarousel/>
+        <PropertyCarousel title="Top Rated Properties"/>
         <Mission/>  
         </>
     );

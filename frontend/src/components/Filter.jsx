@@ -137,7 +137,7 @@ const Filter = () => {
 
             <div className="flex flex-col">
                 <div className="flex items-center justify-between">
-                    <label htmlFor="stories" className="text-stone-500 text-sm font-medium">Number of Stories</label>
+                    <label htmlFor="stories" className="text-stone-500 text-sm font-medium">Number of Storeys</label>
                     <input type="checkbox" checked={filtersEnabled.stories} onChange={() => handleFilterToggle('stories')} />
                 </div>
                 <select
