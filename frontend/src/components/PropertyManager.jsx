@@ -1,61 +1,62 @@
-import React from "react";
-import PropertyCard from "./Property"
-import Image from "../assets/property1.jpg"
-export default function PropertyManager(){
-    return(
-        <>
-            <div className="bg-black flex flex-col  w-[93%] h-[37rem] text-white mx-12 ml-[3.5rem] mt-12 rounded-lg">
-                <div className="flex justify-between">
-                    <h1 className="text-3xl  font-medium  px-10 text-[#F9A826] pt-8">
-                        Properties Overview
-                    </h1>
-                    <a href=""><p className="text-white pr-16 pt-9 text-sm underline hover:text-[#F9A826] hover:font-semibold transition-all">
-                        Manage Properties
-                    </p></a>
-                </div >
-                <div className="flex flex-col justify-center pt-6">
-                <div className="flex w-[93%]  border-b-2 border-gray-800 pb-2 mt-5 justify-between font-semibold mx-10">
-                    <div className="px-4 text-center w-1/4">
-                        Photo
-                    </div>
-                    <div className="px-4 text-center w-1/4">
-                        Customer
-                    </div>
-                    <div className="px-4 text-center w-1/4">
-                        Property
-                    </div>
-                    <div className="px-4 text-center w-1/4">
-                        Type
-                    </div>
-                </div>
-                <PropertyCard
-                    img={Image}
-                    name={"John Doe"}
-                    property={"DHA Villa"}
-                    type={"Villa"}
-                />
-                <PropertyCard
-                    img={Image}
-                    name={"John Doe"}
-                    property={"DHA Villa"}
-                    type={"Villa"}
-                />
-                <PropertyCard
-                    img={Image}
-                    name={"John Doe"}
-                    property={"DHA Villa"}
-                    type={"Villa"}
-                />
-                <PropertyCard
-                    img={Image}
-                    name={"John Doe"}
-                    property={"DHA Villa"}
-                    type={"Villa"}
-                />
+import React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 
-            </div>
-            </div>
-        </>
-    )
 
+export default function PropertyManager({ products = [], sx }) {
+  return (
+    <Card sx={sx}>
+      <CardHeader title="Approved Properties" />
+      <Divider />
+      <List>
+        {products.map((product, index) => (
+          <ListItem divider={index < products.length - 1} key={product.id}>
+            <ListItemAvatar>
+              {product.image ? (
+                <Box component="img" src={product.image} sx={{ borderRadius: 1, height: '48px', width: '48px' }} />
+              ) : (
+                <Box
+                  sx={{
+                    borderRadius: 1,
+                    backgroundColor: 'var(--mui-palette-neutral-200)',
+                    height: '48px',
+                    width: '48px',
+                  }}
+                />
+              )}
+            </ListItemAvatar>
+            <ListItemText
+              primary={product.name}
+              primaryTypographyProps={{ variant: 'subtitle1' }}
+              secondary={product.location}
+              secondaryTypographyProps={{ variant: 'body2' }}
+            />
+            <IconButton edge="end">
+            </IconButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
+        <Button
+          color="inherit"
+          endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
+          size="small"
+          variant="text"
+        >
+          View all
+        </Button>
+      </CardActions>
+    </Card>
+  );
 }

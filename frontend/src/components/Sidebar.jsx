@@ -1,41 +1,47 @@
 import React, { useState } from "react";
 import Home from '../assets/icons/home.png';
-import User from '../assets/icons/user.png';
-import Settings from '../assets/icons/settings.png';
-import Approval from '../assets/icons/approval.png';
+import User from '../assets/icons/user.png'
+import Approval from '../assets/icons/approval.png'
+import Settings from '../assets/icons/settings.png'
+import Menu from '../assets/icons/menu.png'
+import Logo from '../assets/logo/logo-black-yellow.png'
 
-export default function Sidebar({ setSelectedTab }) {
-    const [selected, setSelected] = useState('Dashboard'); // State to track selected tab
+export default function Sidebar() {
+    const [isExpanded, setIsExpanded] = useState(false);
 
-    // Function to handle tab selection
-    const handleTabSelect = (tabName) => {
-        setSelected(tabName);
-        setSelectedTab(tabName); // Lift the state up to AdminPanel
-    }
+    const toggleSidebar = () => {
+        setIsExpanded(!isExpanded);
+    };
 
     return (
-        <div className={`sidebar bg-black  h-full font-roboto shadow-lg transition-all duration-300 md:w-64  lg:w-1/4 `}>
-            <div className={`sidebar-title text-white text-center text-3xl font-semibold px-5 py-6 border-b border-gray-700 transition-all duration-300 `}>
-                <h2>HomeTour</h2>
-                <p className="text-sm font-medium text-[#F9A826]">The way to your home</p>
+        <div
+            className={`sidebar bg-black h-[100vh] font-roboto shadow-lg transition-all duration-300 ${isExpanded ? 'w-3/4 md:w-1/4' : 'w-16'}`}
+        >
+            <div className="sidebar-header flex justify-between items-center border-b border-gray-700 px-5 py-4">
+                <button onClick={toggleSidebar} className={`menu-icon w-8 h-8 transition-all duration-300 ${isExpanded ? 'rotate-90' : ''}`}>
+                    <img src={Menu} alt="Menu" className="w-6 h-6 z-10" />
+                </button>
+                <div className={`sidebar-title mx-auto text-white text-3xl font-semibold transition-all duration-300 ${isExpanded ? 'block' : 'hidden'}`}>
+                    <img className=" w-32 h-32 " src={Logo} alt="BricksReal" />
+                </div>
             </div>
             <div className="sidebar-menu">
-                <ul className="space-y-2 px-5 py-4 text-lg font-semibold">
-                    <li className={`flex items-center py-2 hover:bg-xinc-800 rounded-md transition duration-200 text-inherit ${selected === 'Dashboard' ? 'bg-zinc-800' : ''}`}>
-                        <img className="w-6 h-6 mr-4" src={User} alt="Users" />
-                        <a href="#" className={`text-white block py-3 hover:text-[#F9A826] transition-opacity duration-300`} onClick={() => handleTabSelect('Dashboard')}>Dashboard</a>
+                <ul className={`space-y-8 px-5 py-4 text-sm my-6 font-semibold ${isExpanded ? 'block' : 'hidden'}`}>
+                    <li className="flex items-center w-full mx-auto hover:bg-gray-800 rounded-md transition duration-200 text-inherit">
+                        <img className={`w-6 h-6 mr-4 my-2 ${isExpanded ? 'opacity-100' : 'opacity-0'}`} src={Home} alt="Home" />
+                        <a href="/admin" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>Dashboard</a>
                     </li>
-                    <li className={`flex items-center py-2 hover:bg-gray-800 rounded-md transition duration-200 text-inherit ${selected === 'Manage Properties' ? 'bg-gray-800' : ''}`}>
-                        <img className="w-6 h-6 mr-4" src={Home} alt="Home" />
-                        <a href="#" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300`} onClick={() => handleTabSelect('Manage Properties')}>Manage Properties</a>
+                    <li className="flex items-center hover:bg-gray-800 rounded-md transition duration-200 text-inherit">
+                        <img className={`w-6 h-6 mr-4 my-2 ${isExpanded ? 'opacity-100' : 'opacity-0'}`} src={User} alt="Users" />
+                        <a href="/admin/properties" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>Manage Properties</a>
                     </li>
-                    <li className={`flex items-center py-2 hover:bg-gray-800 rounded-md transition duration-200 text-inherit ${selected === 'Approval' ? 'bg-gray-800' : ''}`}>
-                        <img className="w-6 h-6 mr-4" src={Approval} alt="Orders" />
-                        <a href="#" className={`text-white block py-3 hover:text-[#F9A826] transition-opacity duration-300`} onClick={() => handleTabSelect('Approval')}>Property Approvals</a>
+                    <li className="flex items-center hover:bg-gray-800 rounded-md transition duration-200 text-inherit">
+                        <img className={`w-6 h-6 mr-4 ${isExpanded ? 'opacity-100' : 'opacity-0'}`} src={Approval} alt="Products" />
+                        <a href="/admin/approval" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>Properties Approval</a>
                     </li>
-                    <li className={`flex items-center py-2 hover:bg-gray-800 rounded-md transition duration-200 text-inherit ${selected === 'Manage Profile' ? 'bg-gray-800' : ''}`}>
-                        <img className="w-6 h-6 mr-4" src={Settings} alt="Products" />
-                        <a href="#" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300`} onClick={() => handleTabSelect('Manage Profile')}>Manage Your Profile</a>
+                    <li className="flex items-center hover:bg-gray-800 rounded-md transition duration-200 text-inherit">
+                        <img className={`w-6 h-6 mr-4 ${isExpanded ? 'opacity-100' : 'opacity-0'}`} src={Settings} alt="Orders" />
+                        <a href="/admin/account" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>Manage Account</a>
                     </li>
                 </ul>
             </div>

@@ -1,21 +1,28 @@
-import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
-import ManageProperty from "../components/ManageProperty";
+import ManagePropertyPage from "./ManagePropertyPage";
 import AdminLayout from "../layout/AdminLayout";
+import AccountPage from "../pages/AccountPage";
+import Approval from "../components/Approval";
+
 
 export default function AdminPanel() {
-    const [selectedTab, setSelectedTab] = useState('Dashboard'); // State to track selected tab
-
-    return (
-        <AdminLayout>
-            <div className="w-full">
-                {/* Render components based on selected tab */}
-                {selectedTab === 'Dashboard' && <Dashboard />}
-                {selectedTab === 'Manage Properties' && <ManageProperty />}
-                {/* {selectedTab === 'Approval' && <ApprovalComponent />} */}
-                {/* {selectedTab === 'Manage Profile' && <ManageProfileComponent />} */}
-            </div>
-        </AdminLayout>
-    );
+  return (
+    <Router>
+      <AdminLayout>
+        <div className="w-full">
+          <Routes>
+            {/* Define routes for Dashboard and Manage Properties */}
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/properties" element={<ManagePropertyPage />} />
+            <Route path="/admin/account" element={<AccountPage />} />
+            <Route path="/admin/approval" element={<Approval/>} />
+            {/* Redirect to /admin if no match is found */}
+            <Route path="*" element={<Navigate to="/admin" />} />
+          </Routes>
+        </div>
+      </AdminLayout>
+    </Router>
+  );
 }
