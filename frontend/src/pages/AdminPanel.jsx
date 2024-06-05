@@ -5,24 +5,28 @@ import ManagePropertyPage from "./ManagePropertyPage";
 import AdminLayout from "../layout/AdminLayout";
 import AccountPage from "../pages/AccountPage";
 import Approval from "../components/Approval";
-
+import UpdateProfile from "../components/UpdateProfile";
+import { ThemeProvider } from "@mui/system";
+import theme from "../theme";
 
 export default function AdminPanel() {
   return (
     <Router>
+            <ThemeProvider theme={theme}>
       <AdminLayout>
         <div className="w-full">
           <Routes>
             {/* Define routes for Dashboard and Manage Properties */}
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/properties" element={<ManagePropertyPage />} />
-            <Route path="/admin/account" element={<AccountPage />} />
+            <Route path="/admin/account" element={<UpdateProfile />} />
             <Route path="/admin/approval" element={<Approval/>} />
             {/* Redirect to /admin if no match is found */}
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
         </div>
       </AdminLayout>
+            </ThemeProvider>
     </Router>
   );
 }
