@@ -8,6 +8,7 @@ import {ToastContainer} from 'react-toastify';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Property from './pages/Property';
+import AddProperty from './pages/AddProperty';
 import Find from './pages/Find';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,7 +26,7 @@ function App() {
                         <Route path="/signup" element={<Register/>} />
                         <Route path="/find" element={<Find/>} />
                         <Route path="/property" element={<Property/>} />
-                        
+                        <Route path="/add-property" element={<AddProperty/>} />
                     </Routes>
             </Router>
             </div>

@@ -73,7 +73,7 @@ const Filter = () => {
                 </div>
                 <select
                     id="propertyType"
-                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    className="mt-2 block w-full rounded-md border bg-white border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                     disabled={!filtersEnabled.propertyType}
                 >
                     <option >House</option>
@@ -92,7 +92,7 @@ const Filter = () => {
                 </div>
                 <select
                     id="city"
-                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    className="mt-2 block w-full rounded-md border bg-white border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                     disabled={!filtersEnabled.city}
                 >
                     <option>Lahore</option>
@@ -125,7 +125,7 @@ const Filter = () => {
                     <select
                         value={areaType}
                         onChange={handleAreaTypeChange}
-                        className="block w-1/2 rounded-r-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                        className="block w-1/2 rounded-r-md border bg-white border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                         disabled={!filtersEnabled.area}
                     >
                         <option value="Marla">Marla</option>

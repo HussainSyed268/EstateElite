@@ -17,7 +17,6 @@ export default function Navbar() {
                     </svg>
                 </button>
             </div>
-            <div className={` w-[60%] flex justify-between ${!isOpen ? "flex-row":"flex-col" }  `}>
             <div className={`flex-col lg:flex-row lg:flex lg:items-center ${isOpen ? "flex" : "hidden"} lg:space-x-5 mx-10`}>
                 <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-5 z-10">
                     <li>
@@ -27,13 +26,19 @@ export default function Navbar() {
                         <a href="/find" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">Find Property</a>
                     </li>
                     <li>
+                        <a href="/add-property" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">List Property</a>
+                    </li>
+                    <li>
                         <a href="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">About</a>
                     </li>
+                    
                     <li>
                         <a href="/contact" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</a>
                     </li>
                 </ul>
                 </div>
+            <div className={` flex justify-between ${!isOpen ? "flex-row":"flex-col" }  `}>
+            
                 <div className={` lg:flex-row lg:flex lg:items-center space-x-2 mt-4  lg:mt-0 mx-10 ${isOpen ? "flex" : "hidden"}`}>
                     <a href="/login">
                         <button className="px-4 h-10 font-semibold rounded-xl hover:text-white hover:bg-black transition-all">Log In</button>
