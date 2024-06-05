@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import dayjs from 'dayjs';
 import PendingProperties from './PendingProperties';
+import { margin } from '@mui/system';
 
 const orders = [
     {
@@ -42,7 +43,7 @@ const orders = [
 
   export default function Approval(){
     return(
-        <div className='mx-16 h-full mt-32'>
+        <div className=' mx-20 md:mx-24 sm:mx-20 lg:mx-32 h-full mt-32'>
         <Grid item lg={8} md={12} xs={12}>
             <PendingProperties
               orders={orders}

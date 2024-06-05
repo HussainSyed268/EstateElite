@@ -80,6 +80,7 @@ const UpdateProfile = () => {
   };
 
   return (
+    <div className='min-w-[300] mx-16 md:mx-0 lg:mx-0 sm:mx-0'>
     <StyledContainer component="main" maxWidth="md">
       <ProfileHeader>
         <Typography component="h1" variant="h5">
@@ -165,7 +166,7 @@ const UpdateProfile = () => {
                   value={profile.phone}
                   onChange={handleChange}
                   disabled={!isEditing}
-                />
+                  />
               </Grid>
               
               <Grid item xs={12} sm={12}>
@@ -182,7 +183,7 @@ const UpdateProfile = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />
+                />
 
               </Grid>
             </Grid>
@@ -217,7 +218,7 @@ const UpdateProfile = () => {
                 value={profile.confirmPassword}
                 onChange={handleChange}
                 disabled={!isEditing}
-              />
+                />
             </Grid>
           </Grid>
           
@@ -235,6 +236,7 @@ const UpdateProfile = () => {
           )}
       </StyledForm>
     </StyledContainer>
+  </div>
   );
 };
 

@@ -5,7 +5,6 @@ import Card from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
-import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,34 +13,24 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Grid';
 import { useSelection } from '../hooks/use-selection';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import dayjs from 'dayjs';
 
-const statusMap = {
-  pending: { label: 'Pending', color: 'warning' },
-  completed: { label: 'Completed', color: 'success' },
-  canceled: { label: 'Canceled', color: 'error' },
-};
+export default function UserList({ users = [], sx }) {
+  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(users);
 
-export default function PendingProperties({ orders = [], sx }) {
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(orders);
-
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < orders.length;
-  const selectedAll = orders.length > 0 && selected?.size === orders.length;
+  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < users.length;
+  const selectedAll = users.length > 0 && selected?.size === users.length;
 
   return (
     <Card sx={sx}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <CardHeader title="Pending Properties" />
+        <CardHeader title="Manage Users" />
         {(selectedSome || selectedAll) && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', marginBottom: 2 }}>
-            <Button sx={{ margin: 1 }} color="success" variant="contained">
-              Approve
-            </Button>
             <Button sx={{ margin: 1 }} color="error" variant="contained">
-              Decline
+              Revoke
             </Button>
           </Box>
         )}
@@ -64,42 +53,37 @@ export default function PendingProperties({ orders = [], sx }) {
                   }}
                 />
               </TableCell>
-              <TableCell>Property</TableCell>
-              <TableCell>Seller</TableCell>
-              <TableCell sortDirection="desc">Date</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>User ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Type</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
-              const isSelected = selected?.has(order.id);
-              const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
+            {users.map((user) => {
+              const isSelected = selected?.has(user.id);
 
               return (
-                <TableRow hover key={order.id} selected={isSelected}>
+                <TableRow hover key={user.id} selected={isSelected}>
                   <TableCell>
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
                         if (event.target.checked) {
-                          selectOne(order.id);
+                          selectOne(user.id);
                         } else {
-                          deselectOne(order.id);
+                          deselectOne(user.id);
                         }
                       }}
                     />
                   </TableCell>
                   <TableCell>
                     <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Avatar src={order.avatar} />
-                      <span>{order.id}</span>
+                      <Avatar src={user.avatar} />
+                      <span>{user.id}</span>
                     </Stack>
                   </TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
-                  <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
-                  <TableCell>
-                    <Chip color={color} label={label} size="small" />
-                  </TableCell>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.type}</TableCell>
                 </TableRow>
               );
             })}

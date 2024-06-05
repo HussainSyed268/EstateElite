@@ -107,7 +107,7 @@ export default function ManagePropertyPage() {
   const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
 
   return (
-    <div className='mt-32 lg:mx-16 md:mx-10 sm:mx-6'>
+    <div className='mt-32 min-w-[300px] mx-20 lg:mx-32 md:mx-20 sm:mx-20'>
       <Stack spacing={3}>
         <Stack direction="row" spacing={3} className="flex-wrap md:flex-nowrap items-center justify-between">
           <Stack spacing={1} sx={{ flex: '1 1 auto', textAlign: 'left' }}>
