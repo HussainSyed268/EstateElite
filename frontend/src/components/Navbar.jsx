@@ -1,7 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Logo from "../assets/logo.png";
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { UserPopover } from './UserPopover'; // Import UserPopover component
+import { AuthContext } from '../context/AuthContext'; // Assuming you have an AuthContext
+
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false); // Define the state for mobile menu
+    const [anchorEl, setAnchorEl] = useState(null);
+    const { isAuthenticated, user } = useContext(AuthContext); // Get authentication status and user info
+
+    const handleAvatarClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const isPopoverOpen = Boolean(anchorEl);
 
     return (
         <nav className={`relative flex justify-between items-center font-raleway z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
@@ -31,24 +48,38 @@ export default function Navbar() {
                     <li>
                         <a href="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">About</a>
                     </li>
-                    
                     <li>
                         <a href="/contact" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</a>
                     </li>
                 </ul>
-                </div>
-            <div className={` flex justify-between ${!isOpen ? "flex-row":"flex-col" }  `}>
-            
-                <div className={` lg:flex-row lg:flex lg:items-center space-x-2 mt-4  lg:mt-0 mx-10 ${isOpen ? "flex" : "hidden"}`}>
-                    <a href="/login">
-                        <button className="px-4 h-10 font-semibold rounded-xl hover:text-white hover:bg-black transition-all">Log In</button>
-                    </a>
-                    <a href="/signup">
-                        <button className="px-4 h-10 font-semibold rounded-xl bg-[#F9A826] hover:text-white hover:bg-black transition-all">Sign Up</button>
-                    </a>
-                </div>
             </div>
-            
+            <div className={`flex justify-between ${!isOpen ? "flex-row" : "flex-col"}`}>
+                {isAuthenticated ? (
+                    <div className={`lg:flex-row lg:flex lg:items-center space-x-2 mt-4 lg:mt-0 mx-10 ${isOpen ? "flex" : "hidden"}`}>
+                        <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                            <Avatar
+                                src={user.avatarUrl} // Assuming user object has an avatarUrl property
+                                sx={{ cursor: 'pointer' }}
+                                onClick={handleAvatarClick} // Attach click handler
+                            />
+                        </Stack>
+                    </div>
+                ) : (
+                    <div className={`lg:flex-row lg:flex lg:items-center space-x-2 mt-4 lg:mt-0 mx-10 ${isOpen ? "flex" : "hidden"}`}>
+                        <a href="/login">
+                            <button className="px-4 h-10 font-semibold rounded-xl hover:text-white hover:bg-black transition-all">Log In</button>
+                        </a>
+                        <a href="/signup">
+                            <button className="px-4 h-10 font-semibold rounded-xl bg-[#F9A826] hover:text-white hover:bg-black transition-all">Sign Up</button>
+                        </a>
+                    </div>
+                )}
+            </div>
+            <UserPopover 
+                anchorEl={anchorEl} 
+                open={isPopoverOpen} 
+                onClose={handlePopoverClose} 
+            />
         </nav>
     );
 }
