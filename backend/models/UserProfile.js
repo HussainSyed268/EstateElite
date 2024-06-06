@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {sequelize} = require('../config/database');
+const { sequelize } = require('../config/database');
 const User = require('./User');
 
 const UserProfile = sequelize.define('UserProfile', {
@@ -28,13 +28,9 @@ const UserProfile = sequelize.define('UserProfile', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    address: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
     profile_picture: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: DataTypes.TEXT,
+        allowNull: false
     }
 }, {
     timestamps: false,

@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('tour', 'root', 'root', {
+const sequelize = new Sequelize('bricksreal', 'root', 'root', {
     host: 'localhost',
     dialect: 'mysql'
 });

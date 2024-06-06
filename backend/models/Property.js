@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {sequelize} = require('../config/database');
+const { sequelize } = require('../config/database');
 const User = require('./User');
 
 const Property = sequelize.define('Property', {
@@ -16,7 +16,7 @@ const Property = sequelize.define('Property', {
         },
         allowNull: false
     },
-    title: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -28,13 +28,62 @@ const Property = sequelize.define('Property', {
         type: DataTypes.DECIMAL,
         allowNull: false
     },
-    location: {
+    address: {
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    city: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    country: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    storeys: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    bedrooms: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    bathrooms: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    parking_space: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
+    area: {
+        type: DataTypes.DECIMAL,
+        allowNull: false
+    },
+    area_unit: {
+        type: DataTypes.ENUM('marla', 'canal'),
+        allowNull: false
+    },
+    status: {
+        type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+        allowNull: false
+    },
+    listing_reason: {
+        type: DataTypes.ENUM('rent', 'sale'),
         allowNull: false
     },
     type: {
         type: DataTypes.ENUM('apartment', 'house', 'condo', 'land', 'commercial'),
         allowNull: false
+    },
+    rating: {
+        type: DataTypes.DECIMAL(2, 1),
+        allowNull: false,
+        defaultValue: 0.0,
+        validate: {
+            min: 0.0,
+            max: 5.0
+        }
     },
     created_at: {
         type: DataTypes.DATE,

@@ -1,21 +1,12 @@
 const { DataTypes } = require('sequelize');
-const {sequelize} = require('../config/database');
-const User = require('./User');
+const { sequelize } = require('../config/database');
 const Property = require('./Property');
 
-const Inquiry = sequelize.define('Inquiry', {
+const PropertyImages = sequelize.define('PropertyImages', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
-    },
-    user_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: User,
-            key: 'id'
-        },
-        allowNull: false
     },
     property_id: {
         type: DataTypes.INTEGER,
@@ -25,24 +16,31 @@ const Inquiry = sequelize.define('Inquiry', {
         },
         allowNull: false
     },
-    inquiry: {
+    image: {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    reply: {
-        type: DataTypes.TEXT,
+    is360:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
         allowNull: true
     },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
     }
 }, {
     timestamps: false,
-    tableName: 'inquiries'
+    tableName: 'property_images'
 });
 
-Inquiry.belongsTo(User, { foreignKey: 'user_id' });
-Inquiry.belongsTo(Property, { foreignKey: 'property_id' });
+PropertyImages.belongsTo(Property, { foreignKey: 'property_id' });
 
-module.exports = Inquiry;
+module.exports = PropertyImages;
