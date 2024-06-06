@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { AdminProvider } from './context/AdminContext';
 import Login from './pages/Login';
 import Register from './pages/Signup';
 import Home from './pages/Home';
@@ -27,12 +28,14 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
     return (
         <AuthProvider>
+        <AdminProvider>
             <ThemeProvider theme={theme}>
                 <Router>
                     <Main />
                     <ToastContainer />
                 </Router>
             </ThemeProvider>
+        </AdminProvider>
         </AuthProvider>
     );
 }
@@ -56,7 +59,7 @@ function Main() {
                     <Route path="/listedproperties" element={<ListedProperties />} />
                     <Route path="/updateprofile" element={<UpdateProfile />} />
                     {/* <Route path="/logout" element={<Logout />} /> Create a Logout component or handle logout logic */}
-
+                    
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="properties" element={<ManagePropertyPage />} />

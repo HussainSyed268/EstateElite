@@ -1,12 +1,29 @@
-import React from "react"
+import React, { useContext, useState, useEffect } from "react";
 import {DashboardNav} from "./AdminPanel/DashboardNav";
 import Analytics from "./Analytics";
 import PropertyManager from "./PropertyManager";
 import  PendingProperties  from "./PendingProperties";
 import Grid from '@mui/material/Grid';
 import dayjs from "dayjs";
+import { AdminContext } from "../context/AdminContext";
 
 export default function Dashboard() {
+  const { getPendingProperties } = useContext(AdminContext);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+      getPendingProperties().then((data) => {
+          // Map over the data to extract only the required fields
+          const filteredOrders = data.map(property => ({
+              id: property.id, // Removed the 'ORD-' prefix
+              customer: { name: property.User.username },
+              status: property.status,
+              createdAt: new Date(property.created_at),
+          }));
+          setOrders(filteredOrders);
+      });
+  });
+
   const page = 0;
   const rowsPerPage = 5;
 
@@ -58,43 +75,7 @@ export default function Dashboard() {
           </Grid>
           <Grid item lg={8} md={12} xs={12}>
             <PendingProperties
-              orders={[
-                {
-                  id: 'ORD-007',
-                  customer: { name: 'Ekaterina Tankova' },
-                  amount: 30.5,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-004',
-                  customer: { name: 'Alexa Richardson' },
-                  amount: 10.99,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-003',
-                  customer: { name: 'Anje Keizer' },
-                  amount: 96.43,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-002',
-                  customer: { name: 'Clarke Gillebert' },
-                  amount: 32.54,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-001',
-                  customer: { name: 'Adam Denisov' },
-                  amount: 16.76,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-              ]}
+              orders={orders}
               sx={{ height: '100%' }}
               />
           </Grid>
