@@ -22,7 +22,7 @@ export default function Navbar() {
 
     return (
         <nav className={`relative flex justify-between items-center font-raleway z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
-            <div className="logo font-bold mx-10">
+            <div className="logo font-bold mx-10 ">
                 <a href="/">
                     <img src={Logo} alt="logo" className="w-[180px]" />
                 </a>
