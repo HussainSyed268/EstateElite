@@ -11,13 +11,16 @@ import Property from './pages/Property';
 import AddProperty from './pages/AddProperty';
 import Find from './pages/Find';
 import ManagePropertyPage from "./pages/ManagePropertyPage";
-import Dashboard from "./components/Dashboard"
+import Dashboard from "./components/Dashboard";
 import AdminLayout from "./layout/AdminLayout";
 import Approval from "./components/Approval";
 import UpdateProfile from "./components/UpdateProfile";
-import ManageUserPage from "./pages/ManageUserPage"
+import ManageUserPage from "./pages/ManageUserPage";
 import { ThemeProvider } from "@mui/system";
 import theme from "./theme";
+
+import SavedProperties from './components/SavedProperties';
+import ListedProperties from './components/ListedProperties';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -49,7 +52,11 @@ function Main() {
                     <Route path="/find" element={<Find />} />
                     <Route path="/property" element={<Property />} />
                     <Route path="/add-property" element={<AddProperty />} />
-                    
+                    <Route path="/savedproperties" element={<SavedProperties />} />
+                    <Route path="/listedproperties" element={<ListedProperties />} />
+                    <Route path="/updateprofile" element={<UpdateProfile />} />
+                    {/* <Route path="/logout" element={<Logout />} /> Create a Logout component or handle logout logic */}
+
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="properties" element={<ManagePropertyPage />} />
