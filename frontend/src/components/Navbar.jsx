@@ -1,14 +1,15 @@
 import React, { useState, useContext } from "react";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logoFin.png";
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import { UserPopover } from './UserPopover'; // Import UserPopover component
-import { AuthContext } from '../context/AuthContext'; // Assuming you have an AuthContext
+import { UserPopover } from './UserPopover';
+import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false); // Define the state for mobile menu
+    const [isOpen, setIsOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const { isAuthenticated, user } = useContext(AuthContext); // Get authentication status and user info
+    const { auth } = useContext(AuthContext);
 
     const handleAvatarClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -20,12 +21,15 @@ export default function Navbar() {
 
     const isPopoverOpen = Boolean(anchorEl);
 
+    const { user, token } = auth;
+    const isAuthenticated = Boolean(token);
+
     return (
         <nav className={`relative flex justify-between items-center font-raleway z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl`}>
             <div className="logo font-bold mx-10 ">
-                <a href="/">
+                <Link to="/">
                     <img src={Logo} alt="logo" className="w-[180px]" />
-                </a>
+                </Link>
             </div>
             <div className="flex lg:hidden mx-10">
                 <button onClick={() => setIsOpen(!isOpen)} className="absolute m-4 top-0 right-0 text-[#242424] focus:outline-none">
@@ -37,19 +41,19 @@ export default function Navbar() {
             <div className={`flex-col lg:flex-row lg:flex lg:items-center ${isOpen ? "flex" : "hidden"} lg:space-x-5 mx-10`}>
                 <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-5 z-10">
                     <li>
-                        <a href="/" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Home</a>
+                        <Link to="/" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Home</Link>
                     </li>
                     <li>
-                        <a href="/find" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">Find Property</a>
+                        <Link to="/find" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">Find Property</Link>
                     </li>
                     <li>
-                        <a href="/add-property" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">List Property</a>
+                        <Link to="/add-property" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">List Property</Link>
                     </li>
                     <li>
-                        <a href="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all ">About</a>
+                        <Link to="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">About</Link>
                     </li>
                     <li>
-                        <a href="/contact" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</a>
+                        <Link to="/contact" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</Link>
                     </li>
                 </ul>
             </div>
@@ -58,7 +62,7 @@ export default function Navbar() {
                     <div className={`lg:flex-row lg:flex lg:items-center space-x-2 mt-4 lg:mt-0 mx-10 ${isOpen ? "flex" : "hidden"}`}>
                         <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                             <Avatar
-                                src={user.avatarUrl} // Assuming user object has an avatarUrl property
+                                src={user.profile.profile_picture} // Use base64 profile picture
                                 sx={{ cursor: 'pointer' }}
                                 onClick={handleAvatarClick} // Attach click handler
                             />
@@ -66,12 +70,12 @@ export default function Navbar() {
                     </div>
                 ) : (
                     <div className={`lg:flex-row lg:flex lg:items-center space-x-2 mt-4 lg:mt-0 mx-10 ${isOpen ? "flex" : "hidden"}`}>
-                        <a href="/login">
+                        <Link to="/login">
                             <button className="px-4 h-10 font-semibold rounded-xl hover:text-white hover:bg-black transition-all">Log In</button>
-                        </a>
-                        <a href="/signup">
+                        </Link>
+                        <Link to="/signup">
                             <button className="px-4 h-10 font-semibold rounded-xl bg-[#F9A826] hover:text-white hover:bg-black transition-all">Sign Up</button>
-                        </a>
+                        </Link>
                     </div>
                 )}
             </div>

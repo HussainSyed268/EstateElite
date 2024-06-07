@@ -1,7 +1,7 @@
 //Create a simple footer component
 
 import React from 'react';
-import Logo from '../assets/logo2.png';
+import Logo from '../assets/logoFin.png';
 
 const Footer = () => {
     return (

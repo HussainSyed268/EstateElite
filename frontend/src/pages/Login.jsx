@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import Logo from '../assets/logo3.png';
 import {toast} from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,14 +47,14 @@ const Login = () => {
 
     return (
         <section className="bg-white">
-            <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
+            <div className="container flex items-center justify-center h-[35rem] px-6 mx-auto">
                 <form onSubmit={handleSubmit} className="w-full max-w-md">
                 <div className="flex justify-center mx-auto">
-                        <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="logo" />
+                        <img className="w-[2rem]" src={Logo} alt="logo" />
                     </div>
                     
                     <div className="flex items-center justify-center mt-6">
-                        <Link to="/login" className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500">
+                        <Link to="/login" className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-[#F9A826]">
                             sign in
                         </Link>
 
@@ -72,7 +73,7 @@ const Login = () => {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-[#F9A826] focus:ring-[#f0c073] focus:outline-none focus:ring focus:ring-opacity-40"
                             placeholder="Username"
                         />
                     </div>
@@ -87,18 +88,18 @@ const Login = () => {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                            className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-[#F9A826] focus:ring-[#f0c073] focus:outline-none focus:ring focus:ring-opacity-40"
                             placeholder="Password"
                         />
                     </div>
 
                     <div className="mt-6">
-                        <button type="submit" className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                        <button type="submit" className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-[#F9A826] rounded-lg hover:bg-[#e4a94a] focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                             Sign in
                         </button>
 
                         <div className="mt-6 text-center">
-                            <Link to="/signup" className="text-sm text-blue-500 hover:underline">
+                            <Link to="/signup" className="text-sm text-[#F9A826] hover:underline">
                                 Don't have an account yet? Sign up
                             </Link>
                         </div>

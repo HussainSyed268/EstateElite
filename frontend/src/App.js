@@ -43,11 +43,14 @@ function App() {
 function Main() {
     const location = useLocation();
     const isAdminRoute = location.pathname.startsWith('/admin');
+    const noFooterRoutes = ['/login', '/signup'];
+
+    const shouldHideFooter = noFooterRoutes.includes(location.pathname);
 
     return (
         <>
             {!isAdminRoute && <Navbar />}
-            <div className='min-h-[100vh]'>
+            <div className=''>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
@@ -69,7 +72,7 @@ function Main() {
                     </Route>
                 </Routes>
             </div>
-            {!isAdminRoute && <Footer />}
+            {!isAdminRoute && !shouldHideFooter && <Footer />}
         </>
     );
 }
