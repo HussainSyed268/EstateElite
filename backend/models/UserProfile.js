@@ -30,7 +30,7 @@ const UserProfile = sequelize.define('UserProfile', {
     },
     profile_picture: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
     }
 }, {
     timestamps: false,
