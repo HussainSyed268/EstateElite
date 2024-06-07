@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useLocation, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -26,17 +26,16 @@ const statusMap = {
   canceled: { label: 'Canceled', color: 'error' },
 };
 
-export default function PendingProperties({ orders = [], sx }) {
-  const { rejectProperty } = useContext(AdminContext);
-  const {approveProperty} = useContext(AdminContext);
+export default function PendingProperties({ orders: pendingOrders = [], sx }) {
+  const { rejectProperty, approveProperty } = useContext(AdminContext);
 
   const [modifiedOrders, setModifiedOrders] = useState([]);
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(orders);
+  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(pendingOrders);
   const location = useLocation();
   const [maxItems, setMaxItems] = useState(5);
 
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < orders.length;
-  const selectedAll = orders.length > 0 && selected?.size === orders.length;
+  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < pendingOrders.length;
+  const selectedAll = pendingOrders.length > 0 && selected?.size === pendingOrders.length;
   
   // Determine whether to show the "View All" button based on the current path
   const showViewAllButton = location.pathname === '/admin';
@@ -46,8 +45,10 @@ export default function PendingProperties({ orders = [], sx }) {
     Promise.all(selectedOrderIds.map(id => rejectProperty(id)))
       .then(() => {
         // Filter out the rejected properties
-        const updatedOrders = modifiedOrders.filter(order => !selectedOrderIds.includes(order.id));
-        setModifiedOrders(updatedOrders);
+        console.log(pendingOrders)
+        const updatedOrders = pendingOrders.filter(order => !selectedOrderIds.includes(order.id));
+        console.log(updatedOrders)
+        setModifiedOrders(updatedOrders); // Update modifiedOrders state to reflect changes
         console.log("Properties rejected successfully");
       })
       .catch(error => {
@@ -55,14 +56,14 @@ export default function PendingProperties({ orders = [], sx }) {
         // Handle error
       });
   };
-
+  
   const handleApprove = () => {
     const selectedOrderIds = Array.from(selected);
     Promise.all(selectedOrderIds.map(id => approveProperty(id)))
       .then(() => {
         // Filter out the approved properties
-        const updatedOrders = modifiedOrders.filter(order => !selectedOrderIds.includes(order.id));
-        setModifiedOrders(updatedOrders);
+        const updatedOrders = pendingOrders.filter(order => !selectedOrderIds.includes(order.id));
+        setModifiedOrders(updatedOrders); // Update modifiedOrders state to reflect changes
         console.log("Properties approved successfully");
       })
       .catch(error => {
@@ -70,6 +71,12 @@ export default function PendingProperties({ orders = [], sx }) {
         // Handle error
       });
   };
+
+  useEffect(() => {
+    setModifiedOrders(modifiedOrders);
+  }, []);
+
+  
 
   return (
     <Card sx={sx}>
@@ -120,7 +127,7 @@ export default function PendingProperties({ orders = [], sx }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.slice(0, showViewAllButton ? maxItems : orders.length).map((order) => {
+            {pendingOrders.slice(0, showViewAllButton ? maxItems : pendingOrders.length).map((order) => {
               const isSelected = selected?.has(order.id);
               const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
 

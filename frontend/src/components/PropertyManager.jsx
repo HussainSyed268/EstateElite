@@ -10,20 +10,21 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
+import { Link } from 'react-router-dom';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 
 
-export default function PropertyManager({ products = [], sx }) {
+export default function PropertyManager({ properties = [], sx }) {
   return (
     <Card sx={sx}>
       <CardHeader title="Approved Properties" />
       <Divider />
       <List>
-        {products.map((product, index) => (
-          <ListItem divider={index < products.length - 1} key={product.id}>
+        {properties.map((property, index) => (
+          <ListItem divider={index < properties.length - 1} key={property.id}>
             <ListItemAvatar>
-              {product.image ? (
-                <Box component="img" src={product.image} sx={{ borderRadius: 1, height: '48px', width: '48px' }} />
+              {property.image ? (
+                <Box component="img" src={property.image} sx={{ borderRadius: 1, height: '48px', width: '48px' }} />
               ) : (
                 <Box
                   sx={{
@@ -36,9 +37,9 @@ export default function PropertyManager({ products = [], sx }) {
               )}
             </ListItemAvatar>
             <ListItemText
-              primary={product.name}
+              primary={property.name}
               primaryTypographyProps={{ variant: 'subtitle1' }}
-              secondary={product.location}
+              secondary={property.location}
               secondaryTypographyProps={{ variant: 'body2' }}
             />
             <IconButton edge="end">
@@ -48,14 +49,16 @@ export default function PropertyManager({ products = [], sx }) {
       </List>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button
-          color="inherit"
-          endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
-          size="small"
-          variant="text"
-        >
-          View all
-        </Button>
+        <Link to="/admin/properties">
+          <Button
+            color="inherit"
+            endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
+            size="small"
+            variant="text"
+            >
+            View all
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );
