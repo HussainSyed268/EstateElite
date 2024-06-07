@@ -36,6 +36,9 @@ exports.getAllPropertiesCount = async(req, res) => {
     }
 }
 
+
+// Pending Properties Section
+
 exports.getPendingProperties = async (req, res) => {
     try {
         const pendingProperties = await Property.findAll({
@@ -79,5 +82,26 @@ exports.ApproveProperty = async (req, res) => {
     } catch (error) {
         console.error('Failed to approve property:', error);
         res.status(500).json({ error: 'Failed to approve property' });
+    }
+}
+
+
+// Manage Approved Properties Section
+
+exports.getApprovedProperties = async (req, res) => {
+    try{
+        const approvedProperties = await Property.findAll({
+            where: {
+                status: 'approved'
+            },
+            include: [{
+                model: User,
+                attributes: ['username']
+            }]
+        });
+        res.json(approvedProperties);
+    } catch(error){
+        console.error('Failed to get approved properties:', error);
+        res.status(500).json({ error: 'Failed to get approved properties' });
     }
 }

@@ -49,13 +49,23 @@ const AdminProvider = ({ children }) => {
         }
     }
 
+    const getApprovedProperties = async () => {
+        try {
+            const response = await axios.get('/api/admin/approveproperty');
+            return response.data;
+        } catch (error) {
+            console.error('Failed to get approved properties:', error);
+        }
+    }
+
     return (
         <AdminContext.Provider value={{ 
             getAllUsersCount, 
             getAllPropertiesCount,
             getPendingProperties,
             rejectProperty,
-            approveProperty
+            approveProperty,
+            getApprovedProperties
         }}>
             {children}
         </AdminContext.Provider>

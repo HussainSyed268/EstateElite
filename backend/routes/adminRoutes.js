@@ -8,5 +8,6 @@ router.post('/propertycount', adminController.getAllPropertiesCount);
 router.get('/pending', adminController.getPendingProperties);
 router.post('/reject/:id', adminController.RejectProperty);
 router.post('/approve/:id', adminController.ApproveProperty);
+router.get('/approveproperty', adminController.getApprovedProperties);
 
 module.exports = router;  
