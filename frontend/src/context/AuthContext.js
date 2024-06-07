@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import defaultUser from '../assets/defaultUser.jpg';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +12,22 @@ const AuthProvider = ({ children }) => {
         token: localStorage.getItem('token') || '',
         user: JSON.parse(localStorage.getItem('user')) || null
     });
+
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+    const fetchDefaultUserImage = async () => {
+        const response = await fetch(defaultUser);
+        const blob = await response.blob();
+        const base64Image = await convertToBase64(blob);
+        return base64Image;
+    };
 
     const login = async (username, password) => {
         try {
@@ -27,16 +44,16 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (username, email, password) => {
+    const register = async (username, email, password, firstName, lastName, contactNumber) => {
         try {
-            await axios.post('/api/auth/register', { username, email, password });
+            const profilePicture = await fetchDefaultUserImage();
+            await axios.post('/api/auth/register', { username, email, password, firstName, lastName, contactNumber, profilePicture });
             toast.success('User registered successfully', {
                 position: "bottom-right",
             });
             //wait for 1.5 seconds
             setTimeout(() => {
-                login(username, password);
-                window.location = '/';
+                window.location = '/login';
             }, 1500);
         } catch (error) {
             console.error('Registration failed:', error);
@@ -55,6 +72,7 @@ const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider value={{ auth, login, register, logout }}>
             {children}
+            <ToastContainer />
         </AuthContext.Provider>
     );
 };
