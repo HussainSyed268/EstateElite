@@ -58,6 +58,24 @@ const AdminProvider = ({ children }) => {
         }
     }
 
+    const getAllUsers = async () => {
+        try {
+            const response = await axios.get('/api/admin/users');
+            return response.data;
+        } catch (error) {
+            console.error('Failed to get users:', error);
+        }
+    }
+
+    const revokeUser = async (id) => {
+        try{
+            const response = await axios.post(`/api/admin/revoke/${id}`);
+            return response.data;
+        } catch(error){
+            console.error('Failed to revoke user:', error);
+        }
+    }
+
     return (
         <AdminContext.Provider value={{ 
             getAllUsersCount, 
@@ -65,7 +83,9 @@ const AdminProvider = ({ children }) => {
             getPendingProperties,
             rejectProperty,
             approveProperty,
-            getApprovedProperties
+            getApprovedProperties,
+            getAllUsers,
+            revokeUser
         }}>
             {children}
         </AdminContext.Provider>

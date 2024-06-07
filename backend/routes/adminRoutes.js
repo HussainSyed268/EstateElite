@@ -9,5 +9,7 @@ router.get('/pending', adminController.getPendingProperties);
 router.post('/reject/:id', adminController.RejectProperty);
 router.post('/approve/:id', adminController.ApproveProperty);
 router.get('/approveproperty', adminController.getApprovedProperties);
+router.post('/users', adminController.getAllUsers);
+router.post('/revoke/:id', adminController.revokeUser);
 
 module.exports = router;  

@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Property = require('../models/Property');
 const PropertyImage = require('../models/PropertyImage');
+const UserProfile = require('../models/UserProfile');
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -103,5 +104,31 @@ exports.getApprovedProperties = async (req, res) => {
     } catch(error){
         console.error('Failed to get approved properties:', error);
         res.status(500).json({ error: 'Failed to get approved properties' });
+    }
+}
+
+// Manage Users Section
+
+exports.getAllUsers = async (req, res) => {
+    try{
+        const users = await User.findAll();
+        res.json(users);
+    } catch(error){
+        console.error('Failed to get users:', error);
+        res.status(500).json({ error: 'Failed to get users' });
+    }
+}
+
+exports.revokeUser = async (req, res) => {
+    try{
+        //Revoke User and delete his all properties and his user profile (if any)
+        const { id } = req.params;
+        await User.destroy({ where: { id } });
+        await Property.destroy({ where: { seller_id: id } });
+        await UserProfile.destroy({ where: { user_id: id } });
+        res.json({ message: 'User revoked successfully' }); 
+    } catch(error){
+        console.error('Failed to revoke user:', error);
+        res.status(500).json({ error: 'Failed to revoke user' });
     }
 }
