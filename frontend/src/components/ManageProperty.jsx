@@ -1,6 +1,4 @@
-'use client';
-
-import * as React from 'react';
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -15,33 +13,23 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Chip } from '@mui/material';
 
-import { useSelection } from '../hooks/use-selection';
-
-function noop() {
-  // do nothing
-}
-
-
 export default function ManageProperty({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
+  onPageChange = () => {},
+  onRowsPerPageChange = () => {},
+  selectAll = () => {},
+  deselectAll = () => {},
+  selectOne = () => {},
+  deselectOne = () => {},
+  selected = new Set(),
 }) {
-  const rowIds = React.useMemo(() => {
-    return rows.map((customer) => customer.id);
-  }, [rows]);
+  const rowIds = React.useMemo(() => rows.map((row) => row.id), [rows]);
 
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(rowIds);
-
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
-  const selectedAll = rows.length > 0 && selected?.size === rows.length;
-
-  const statusMap = {
-    pending: { label: 'Pending', color: 'warning' },
-    Approved: { label: 'Approved', color: 'success' },
-    refunded: { label: 'Refunded', color: 'error' },
-  } ;
+  const selectedSome = selected.size > 0 && selected.size < rows.length;
+  const selectedAll = rows.length > 0 && selected.size === rows.length;
 
   return (
     <Card>
@@ -71,7 +59,7 @@ export default function ManageProperty({
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.id);
+              const isSelected = selected.has(row.id);
 
               return (
                 <TableRow hover key={row.id} selected={isSelected}>
@@ -94,18 +82,12 @@ export default function ManageProperty({
                   </TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
+                    {row.address}, {row.city}, {row.country}
                   </TableCell>
                   <TableCell>{row.price}</TableCell>
                   <TableCell>
-                    {(() => {
-                      const { label, color } = statusMap[row.status] ?? { label: 'Pending', color: 'default' };
-                      return (
-                        <Chip color={color} label={label} size="small" />
-                      );
-                    })()}
+                    <Chip color="success" label={row.status} size="small" />
                   </TableCell>
-
                 </TableRow>
               );
             })}
@@ -116,8 +98,8 @@ export default function ManageProperty({
       <TablePagination
         component="div"
         count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}

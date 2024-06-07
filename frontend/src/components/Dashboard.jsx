@@ -1,106 +1,73 @@
-import React from "react"
-import {DashboardNav} from "./AdminPanel/DashboardNav";
+import React, { useContext, useState, useEffect } from "react";
+import { DashboardNav } from "./AdminPanel/DashboardNav";
 import Analytics from "./Analytics";
 import PropertyManager from "./PropertyManager";
-import  PendingProperties  from "./PendingProperties";
+import PendingProperties from "./PendingProperties";
 import Grid from '@mui/material/Grid';
 import dayjs from "dayjs";
+import { AdminContext } from "../context/AdminContext";
 
 export default function Dashboard() {
-  const page = 0;
-  const rowsPerPage = 5;
+  const { getPendingProperties, getApprovedProperties } = useContext(AdminContext);
+  const [pendingOrders, setPendingOrders] = useState([]);
+  const [approvedProperties, setApprovedProperties] = useState([]);
 
-  return(
+  useEffect(() => {
+    const fetchPendingProperties = async () => {
+      try {
+        const data = await getPendingProperties();
+        const filteredOrders = data.map(property => ({
+          id: property.id,
+          customer: { name: property.User.username },
+          status: property.status,
+          createdAt: new Date(property.created_at),
+        }));
+        setPendingOrders(filteredOrders);
+      } catch (error) {
+        console.error('Failed to fetch pending properties:', error);
+      }
+    };
+
+    fetchPendingProperties();
+  }, [getPendingProperties]);
+
+  useEffect(() => {
+    const fetchApprovedProperties = async () => {
+      try {
+        const data = await getApprovedProperties();
+        // Assuming data structure from getApprovedProperties is similar to pending properties
+        const filteredProperties = data.map(property => ({
+          id: property.id,
+          name: property.name,
+          image: property.image,
+          location: `${property.city}, ${property.country}`
+        })).slice(0, 6); // Limit to only 5 properties
+        setApprovedProperties(filteredProperties);
+      } catch (error) {
+        console.error('Failed to fetch approved properties:', error);
+      }
+    };
+
+    fetchApprovedProperties();
+  }, [getApprovedProperties]);
+
+  return (
     <>
-      
-      <div className=" w-full bg-[]">
-      <div className="min-w-[300px] mx-10 lg:mx-16 sm:mx-10">
-        <Analytics/>
+      <div className="w-full bg-[]">
+        <div className="min-w-[300px] mx-10 lg:mx-16 sm:mx-10">
+          <Analytics />
         </div>
-        <div className="min-w-[300px] mx-10 ml-20 lg:mx-28 sm:mx-20 mt-10"> 
-        <Grid container spacing={2} >
-          <Grid item lg={4} md={12} xs={12}>
-            <PropertyManager
-              products={[
-                {
-                  id: 'PRD-005',
-                  name: 'Dha Villa',
-                  image: '/assets/property.png',
-                  location: 'Lahore, Pakistan'
-                },
-                {
-                  id: 'PRD-004',
-                  name: 'Necessaire Body Lotion',
-                  image: '/assets/property.png',
-                  location: 'Lahore, Pakistan'
-                },
-                {
-                  id: 'PRD-003',
-                  name: 'Ritual of Sakura',
-                  image: '/assets/property.png',
-                  location: 'Lahore, Pakistan'
-                },
-                {
-                  id: 'PRD-002',
-                  name: 'Lancome Rouge',
-                  image: '/assets/property.png',
-                  location: 'Lahore, Pakistan'
-                },
-                {
-                  id: 'PRD-001',
-                  name: 'Erbology Aloe Vera',
-                  image: '/assets/property.png',
-                  location: 'Lahore, Pakistan'
-                },
-              ]}
-              sx={{ height: '100%' }}
-            />
+        <div className="min-w-[300px] mx-10 ml-20 lg:mx-28 sm:mx-20 mt-10">
+          <Grid container spacing={2}>
+            <Grid item lg={4} md={12} xs={12}>
+              <PropertyManager properties={approvedProperties} sx={{ height: '100%' }} />
+            </Grid>
+            <Grid item lg={8} md={12} xs={12}>
+              <PendingProperties orders={pendingOrders} sx={{ height: '100%' }} />
+            </Grid>
           </Grid>
-          <Grid item lg={8} md={12} xs={12}>
-            <PendingProperties
-              orders={[
-                {
-                  id: 'ORD-007',
-                  customer: { name: 'Ekaterina Tankova' },
-                  amount: 30.5,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-004',
-                  customer: { name: 'Alexa Richardson' },
-                  amount: 10.99,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-003',
-                  customer: { name: 'Anje Keizer' },
-                  amount: 96.43,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-002',
-                  customer: { name: 'Clarke Gillebert' },
-                  amount: 32.54,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-                {
-                  id: 'ORD-001',
-                  customer: { name: 'Adam Denisov' },
-                  amount: 16.76,
-                  status: 'pending',
-                  createdAt: dayjs().subtract(10, 'minutes').toDate(),
-                },
-              ]}
-              sx={{ height: '100%' }}
-              />
-          </Grid>
-        </Grid>
         </div>
       </div>
     </>
-  )
+  );
 }

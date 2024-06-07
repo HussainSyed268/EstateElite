@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useContext, useState, useEffect } from "react";
+import { useLocation, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -14,7 +15,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Grid';
+import { AdminContext } from '../context/AdminContext';
 import { useSelection } from '../hooks/use-selection';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import dayjs from 'dayjs';
@@ -25,11 +26,57 @@ const statusMap = {
   canceled: { label: 'Canceled', color: 'error' },
 };
 
-export default function PendingProperties({ orders = [], sx }) {
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(orders);
+export default function PendingProperties({ orders: pendingOrders = [], sx }) {
+  const { rejectProperty, approveProperty } = useContext(AdminContext);
 
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < orders.length;
-  const selectedAll = orders.length > 0 && selected?.size === orders.length;
+  const [modifiedOrders, setModifiedOrders] = useState([]);
+  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(pendingOrders);
+  const location = useLocation();
+  const [maxItems, setMaxItems] = useState(5);
+
+  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < pendingOrders.length;
+  const selectedAll = pendingOrders.length > 0 && selected?.size === pendingOrders.length;
+  
+  // Determine whether to show the "View All" button based on the current path
+  const showViewAllButton = location.pathname === '/admin';
+
+  const handleReject = () => {
+    const selectedOrderIds = Array.from(selected);
+    Promise.all(selectedOrderIds.map(id => rejectProperty(id)))
+      .then(() => {
+        // Filter out the rejected properties
+        console.log(pendingOrders)
+        const updatedOrders = pendingOrders.filter(order => !selectedOrderIds.includes(order.id));
+        console.log(updatedOrders)
+        setModifiedOrders(updatedOrders); // Update modifiedOrders state to reflect changes
+        console.log("Properties rejected successfully");
+      })
+      .catch(error => {
+        console.error("Error rejecting properties:", error);
+        // Handle error
+      });
+  };
+  
+  const handleApprove = () => {
+    const selectedOrderIds = Array.from(selected);
+    Promise.all(selectedOrderIds.map(id => approveProperty(id)))
+      .then(() => {
+        // Filter out the approved properties
+        const updatedOrders = pendingOrders.filter(order => !selectedOrderIds.includes(order.id));
+        setModifiedOrders(updatedOrders); // Update modifiedOrders state to reflect changes
+        console.log("Properties approved successfully");
+      })
+      .catch(error => {
+        console.error("Error approving properties:", error);
+        // Handle error
+      });
+  };
+
+  useEffect(() => {
+    setModifiedOrders(modifiedOrders);
+  }, []);
+
+  
 
   return (
     <Card sx={sx}>
@@ -37,10 +84,19 @@ export default function PendingProperties({ orders = [], sx }) {
         <CardHeader title="Pending Properties" />
         {(selectedSome || selectedAll) && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', marginBottom: 2 }}>
-            <Button sx={{ margin: 1 }} color="success" variant="contained">
+            <Button 
+            sx={{ margin: 1 }} 
+            color="success" 
+            variant="contained"
+            onClick={handleApprove}>
               Approve
             </Button>
-            <Button sx={{ margin: 1 }} color="error" variant="contained">
+            <Button
+              sx={{ margin: 1 }}
+              color="error"
+              variant="contained"
+              onClick={handleReject}
+            >
               Decline
             </Button>
           </Box>
@@ -71,7 +127,7 @@ export default function PendingProperties({ orders = [], sx }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
+            {pendingOrders.slice(0, showViewAllButton ? maxItems : pendingOrders.length).map((order) => {
               const isSelected = selected?.has(order.id);
               const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
 
@@ -107,16 +163,20 @@ export default function PendingProperties({ orders = [], sx }) {
         </Table>
       </Box>
       <Divider />
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button
-          color="inherit"
-          endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
-          size="small"
-          variant="text"
-        >
-          View all
-        </Button>
-      </CardActions>
+      {showViewAllButton && (
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <Link to="/admin/approval">
+            <Button
+              color="inherit"
+              endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
+              size="small"
+              variant="text"
+            >
+              View all
+            </Button>
+          </Link>
+        </CardActions>
+      )}
     </Card>
   );
 }

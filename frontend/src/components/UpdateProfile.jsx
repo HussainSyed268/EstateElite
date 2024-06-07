@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Avatar,
   Button,
@@ -11,6 +11,7 @@ import {
   Paper,
 } from '@mui/material';
 import { styled } from '@mui/system';
+import { AuthContext } from '../context/AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -24,7 +25,6 @@ const ProfileHeader = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between',
   width: '100%',
   alignItems: 'center',
-  
 }));
 
 const ProfileBox = styled(Paper)(({ theme }) => ({
@@ -49,15 +49,28 @@ const StyledForm = styled('form')(({ theme }) => ({
 }));
 
 const UpdateProfile = () => {
+  const { getUserDetails, auth } = useContext(AuthContext);
   const [profile, setProfile] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '123-456-7890',
-    address: '123 Main St',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
     newPassword: '',
     confirmPassword: '',
   });
+
+  useEffect(() => {
+    getUserDetails().then((data) => {
+      setProfile({
+        firstName: data.userProfile.first_name,
+        lastName: data.userProfile.last_name,
+        email: data.user.email,
+        phone: data.userProfile.contact_number,
+        newPassword: '',
+        confirmPassword: '',
+      });
+    });
+  }, []);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaved, setIsSaved] = useState(true);
@@ -167,24 +180,6 @@ const UpdateProfile = () => {
                   onChange={handleChange}
                   disabled={!isEditing}
                   />
-              </Grid>
-              
-              <Grid item xs={12} sm={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="address"
-                label="Address"
-                name="address"
-                value={profile.address}
-                onChange={handleChange}
-                disabled={!isEditing}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                />
-
               </Grid>
             </Grid>
           </InfoBox>

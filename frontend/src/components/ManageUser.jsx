@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -13,15 +13,40 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import { AdminContext } from '../context/AdminContext';
 import { useSelection } from '../hooks/use-selection';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import dayjs from 'dayjs';
 
 export default function UserList({ users = [], sx }) {
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(users);
+  const [localUsers, setLocalUsers] = useState(users);
 
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < users.length;
-  const selectedAll = users.length > 0 && selected?.size === users.length;
+  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(localUsers);
+
+  const { revokeUser } = useContext(AdminContext);
+
+  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < localUsers.length;
+  const selectedAll = localUsers.length > 0 && selected?.size === localUsers.length;
+
+  useEffect(() => {
+    setLocalUsers(users);
+  }, [users]);
+
+  const handleRevoke = () => {
+    const selectedUserIds = Array.from(selected);
+  
+    Promise.all(selectedUserIds.map(id => revokeUser(id)))
+      .then(() => {
+        // Filter out the revoked users
+        const updatedUsers = localUsers.filter(user => !selectedUserIds.includes(user.id));
+        setLocalUsers(updatedUsers);
+        console.log("Users revoked successfully");
+      })
+      .catch(error => {
+        console.error("Error revoking users:", error);
+        // Handle error
+      });
+  };
 
   return (
     <Card sx={sx}>
@@ -29,7 +54,12 @@ export default function UserList({ users = [], sx }) {
         <CardHeader title="Manage Users" />
         {(selectedSome || selectedAll) && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', marginBottom: 2 }}>
-            <Button sx={{ margin: 1 }} color="error" variant="contained">
+            <Button 
+              sx={{ margin: 1 }} 
+              color="error" 
+              variant="contained"
+              onClick={handleRevoke}
+            >
               Revoke
             </Button>
           </Box>
@@ -46,7 +76,7 @@ export default function UserList({ users = [], sx }) {
                   indeterminate={selectedSome}
                   onChange={(event) => {
                     if (event.target.checked) {
-                      selectAll();
+                      selectAll(localUsers.map(user => user.id));
                     } else {
                       deselectAll();
                     }
@@ -59,7 +89,7 @@ export default function UserList({ users = [], sx }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => {
+            {localUsers.map((user) => {
               const isSelected = selected?.has(user.id);
 
               return (
@@ -82,8 +112,8 @@ export default function UserList({ users = [], sx }) {
                       <span>{user.id}</span>
                     </Stack>
                   </TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.type}</TableCell>
+                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{user.role}</TableCell>
                 </TableRow>
               );
             })}
@@ -91,16 +121,6 @@ export default function UserList({ users = [], sx }) {
         </Table>
       </Box>
       <Divider />
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button
-          color="inherit"
-          endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
-          size="small"
-          variant="text"
-        >
-          View all
-        </Button>
-      </CardActions>
     </Card>
   );
 }
