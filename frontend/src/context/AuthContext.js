@@ -52,8 +52,19 @@ const AuthProvider = ({ children }) => {
         setAuth({ token: '', user: null });
     };
 
+    const getUserDetails = async () => {
+        try {
+            const id = auth.user.id;
+            const response = await axios.get('/api/users/user/' + id);
+            const { user } = response.data;
+            setAuth({ ...auth, user });
+        } catch (error) {
+            console.error('Failed to get user details:', error);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ auth, login, register, logout }}>
+        <AuthContext.Provider value={{ auth, login, register, logout, getUserDetails }}>
             {children}
         </AuthContext.Provider>
     );
