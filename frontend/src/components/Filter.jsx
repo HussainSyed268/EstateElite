@@ -1,4 +1,11 @@
-import React,{useState} from "react"
+import React,{useState, useContext, useEffect} from "react"
+import axios from "axios"
+import {useHistory} from "react-router-dom"
+import {AuthContext} from "../context/AuthContext"
+import {toast} from "react-toastify"
+
+
+
 
 const Filter = () => {
     const [selected, setSelected] = useState('rent');
@@ -29,6 +36,9 @@ const Filter = () => {
     const handleAreaTypeChange = (e) => {
         setAreaType(e.target.value);
     };
+
+
+
 
     return (
         <div class="mx-8 my-4 max-w-screen font-raleway">

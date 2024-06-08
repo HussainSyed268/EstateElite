@@ -11,6 +11,10 @@ router.put('/edit/:id', propertyController.editProperty);
 // Route to remove a property
 router.delete('/remove/:id', propertyController.removeProperty);
 
+
+//Filter 
+router.get('/filter', propertyController.findProperty);
+
 // Route to get a property by ID
 router.get('/:id', propertyController.getPropertyById);
 

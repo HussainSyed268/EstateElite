@@ -72,16 +72,30 @@ const AuthProvider = ({ children }) => {
     const getUserDetails = async () => {
         try {
             const id = auth.user.id;
-            const response = await axios.get('/api/users/user/' + id);
-            const { user } = response.data;
-            setAuth({ ...auth, user });
+            const response = await axios.post('/api/users/user/' + id);
+            return response.data;
         } catch (error) {
             console.error('Failed to get user details:', error);
         }
     };
 
+    const UpdateUserDetails = async (email, contact, password, first_name, last_name) => {
+        try {
+            const id = auth.user.id;
+            await axios.post('/api/users/update/' + id, { email, contact, password, first_name, last_name });
+            toast.success('User details updated successfully', {
+                position: "bottom-right",
+            });
+        } catch (error) {
+            console.error('Failed to update user details:', error);
+            toast.error('Failed to update user details', {
+                position: "bottom-right",
+            });
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ auth, login, register, logout, getUserDetails }}>
+        <AuthContext.Provider value={{ auth, login, register, logout, getUserDetails, UpdateUserDetails }}>
             {children}
             <ToastContainer />
         </AuthContext.Provider>

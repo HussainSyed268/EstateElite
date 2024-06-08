@@ -12,6 +12,12 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { AuthContext } from '../context/AuthContext';
+import { toast } from 'react-toastify';
+
+
+  const decodeBase64Image = (base64Image) => {
+    return `data:image/jpeg;base64,${base64Image}`;
+  };
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -49,26 +55,35 @@ const StyledForm = styled('form')(({ theme }) => ({
 }));
 
 const UpdateProfile = () => {
-  const { getUserDetails, auth } = useContext(AuthContext);
+  const { getUserDetails, UpdateUserDetails } = useContext(AuthContext);
   const [profile, setProfile] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    status: '',
     newPassword: '',
     confirmPassword: '',
   });
 
+  const [avatarSrc, setAvatarSrc] = useState('');
+  const [displayName, setDisplayName] = useState('');
+
   useEffect(() => {
     getUserDetails().then((data) => {
+      console.log(data);
       setProfile({
         firstName: data.userProfile.first_name,
         lastName: data.userProfile.last_name,
         email: data.user.email,
         phone: data.userProfile.contact_number,
+        status: data.user.role,
         newPassword: '',
         confirmPassword: '',
       });
+      const decodedAvatar = decodeBase64Image(data.userProfile.profile_picture);
+      setAvatarSrc(decodedAvatar);
+      setDisplayName(`${data.userProfile.first_name} ${data.userProfile.last_name}`);
     });
   }, []);
 
@@ -77,7 +92,10 @@ const UpdateProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
+    setProfile(prevProfile => ({
+      ...prevProfile,
+      [name]: value
+    }));
     setIsSaved(false);
   };
 
@@ -85,12 +103,17 @@ const UpdateProfile = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsEditing(false);
     setIsSaved(true);
-    // Perform save logic here
-    console.log(profile);
-  };
+    if(profile.newPassword !== profile.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    } else{
+    UpdateUserDetails(profile.email, profile.phone,profile.newPassword , profile.firstName, profile.lastName);
+    setDisplayName(`${profile.firstName} ${profile.lastName}`);
+  }
+};
 
   return (
     <div className='min-w-[300] mx-16 md:mx-0 lg:mx-0 sm:mx-0'>
@@ -110,11 +133,10 @@ const UpdateProfile = () => {
       </ProfileHeader>
       <ProfileBox>
         <Box display="flex" alignItems="center" mb={2}>
-          <Avatar src='/assets/avatar.png' sx={{ height: '80px', width: '80px' }} />
+          <Avatar src={avatarSrc} sx={{ height: '80px', width: '80px' }} />
           <Box ml={2}>
-            <Typography variant="h6">{`${profile.firstName} ${profile.lastName}`}</Typography>
-            <Typography variant="body2">Los Angeles, USA</Typography>
-            <Typography variant="body2">GTM-7</Typography>
+            <Typography variant="h6">{displayName}</Typography>
+            <Typography variant="body2">{profile.status}</Typography>
           </Box>
         </Box>
       </ProfileBox>
@@ -219,7 +241,7 @@ const UpdateProfile = () => {
           
         </PasswordBox>
         {isEditing && (
-            <Box display="flex" justifyContent="flex-end">
+            <Box display="flex" justifyContent="flex-end" marginBottom="1rem">
               <Button
                 variant="contained"
                 color="success"
@@ -231,6 +253,7 @@ const UpdateProfile = () => {
           )}
       </StyledForm>
     </StyledContainer>
+    {console.log(profile)}
   </div>
   );
 };
