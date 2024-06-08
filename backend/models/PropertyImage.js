@@ -17,16 +17,12 @@ const PropertyImages = sequelize.define('PropertyImages', {
         allowNull: false
     },
     image: {
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT('long'),
         allowNull: false
     },
     is360:{
         type: DataTypes.BOOLEAN,
         allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: true
     },
     created_at: {
         type: DataTypes.DATE,

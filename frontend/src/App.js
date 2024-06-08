@@ -53,7 +53,7 @@ function Main() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Register />} />
                     <Route path="/find" element={<Find />} />
-                    <Route path="/property" element={<Property />} />
+                    <Route path="/property/:propertyId" element={<Property />} />
                     <Route path="/add-property" element={<AddProperty />} />
                     <Route path="/savedproperties" element={<SavedProperties />} />
                     <Route path="/listedproperties" element={<ListedProperties />} />

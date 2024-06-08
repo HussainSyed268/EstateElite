@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaHouse } from "react-icons/fa6";
 import { FaStairs } from "react-icons/fa6";
@@ -7,66 +7,133 @@ import { PiToilet } from "react-icons/pi";
 import { FaCar } from "react-icons/fa";
 import { LiaChartAreaSolid } from "react-icons/lia";
 import PropertyCarousel from "../components/PropertyCarousel";
-import Prop1 from "../assets/p1.jpg";
-import Prop2 from "../assets/p2.png";
-import Prop3 from "../assets/p3.jpg";
-import Prop4 from "../assets/p4.jpg";
-import Prop5 from "../assets/p5.jpg";
-import Prop6 from "../assets/p6.jpg";
-
+import { useParams } from "react-router-dom";
+import axios from 'axios';
+import * as PANOLENS from "panolens";
 
 const Property = () => {
-
+    const { propertyId } = useParams();
+    const [property, setProperty] = useState(null);
+    const [images, setImages] = useState([]);
     const [isSaved, setIsSaved] = useState(false);
+    const [displayedImages, setDisplayedImages] = useState(5);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const panolensContainerRef = useRef(null);
+    let viewer;
+
+
+
+    const getPropertyDetails = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/property/${propertyId}`);
+            setProperty(response.data.property);
+            setImages(response.data.images);
+        } catch (error) {
+            console.error('Error fetching property details:', error);
+        }
+    };
+
+    useEffect(() => {
+        getPropertyDetails();
+    }, [propertyId]);
+
+    useEffect(() => {
+        const updateDisplayedImages = () => {
+            const width = window.innerWidth;
+            if (width <= 640) {
+                setDisplayedImages(1); // max-sm
+            } else if (width <= 768) {
+                setDisplayedImages(4); // max-md
+            } else {
+                setDisplayedImages(5); // default
+            }
+        };
+
+        updateDisplayedImages(); // Update on initial render
+        window.addEventListener('resize', updateDisplayedImages);
+
+        return () => window.removeEventListener('resize', updateDisplayedImages);
+    }, []);
 
     const toggleSave = () => {
         setIsSaved(!isSaved);
     };
 
-    const  propImages = [Prop1, Prop2, Prop3, Prop4, Prop5, Prop6];
 
-    const [displayedImages, setDisplayedImages] = useState(5);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const initializePanolens = () => {
+    const selectedImage = images[currentImageIndex];
+    if (selectedImage.is360) {
+      const container = panolensContainerRef.current;
+      if (container) {
+        container.innerHTML = ""; // Clear previous instance
 
-    const updateDisplayedImages = () => {
-        const width = window.innerWidth;
-        if (width <= 640) {
-            setDisplayedImages(1); // max-sm
-        } else if (width <= 768) {
-            setDisplayedImages(4); // max-md
-        } else {
-            setDisplayedImages(5); // default
-        }
-    };
+        const imageUrl = selectedImage.image.startsWith('data:image') ? selectedImage.image : `data:image/jpeg;base64,${selectedImage.image}`;
+        console.log("Panolens Image URL:", imageUrl);
+
+        const panorama = new PANOLENS.ImagePanorama(imageUrl);
+        console.log("Panolens Panorama Object:", panorama);
+
+        viewer = new PANOLENS.Viewer({ container: container });
+        viewer.add(panorama);
+        console.log("Panolens Viewer Initialized:", viewer);
+      } else {
+        console.error("Panolens container is not available");
+      }
+    } else {
+      console.log("Selected image is not a 360 image");
+    }
+  };
+
+
+  const openModal = (index) => {
+    console.log("openModal called for index:", index);
+    setCurrentImageIndex(index);
+    setIsModalOpen(true);
+  };
+
     useEffect(() => {
-        updateDisplayedImages(); // Update on initial render
-        window.addEventListener('resize', updateDisplayedImages);
-        return () => window.removeEventListener('resize', updateDisplayedImages);
-    }, []);
-
-    const openModal = (index) => {
-        setCurrentImageIndex(index);
-        setIsModalOpen(true);
-    };
+    if (isModalOpen) {
+        initializePanolens();
+    }
+    }, [currentImageIndex, isModalOpen]);
 
     const closeModal = () => {
         setIsModalOpen(false);
     };
 
     const goToPreviousImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? propImages.length - 1 : prevIndex - 1));
+        setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
     };
 
     const goToNextImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex === propImages.length - 1 ? 0 : prevIndex + 1));
+        setCurrentImageIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
     };
 
+    const additionalImagesCount = images.length > displayedImages ? images.length - displayedImages : 0;
 
-    const additionalImagesCount = propImages.length - displayedImages;
-    
+    const capitalizeFLetter = (string) => {
+        return string ? (string[0].toUpperCase() + string.slice(1)) : '';
+    };
+
+    function numberToWord(number) {
+        const numberWords = {
+            1: "one",
+            2: "two",
+            3: "three",
+            4: "four",
+            5: "five",
+            6: "six"
+        };
+        return numberWords[number] || "Number out of range";
+    }
+
+    if (!property || images.length === 0) {
+        return <div>Loading...</div>;
+    }
+
     return (
-<>
+        <>
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
                     <div className="relative bg-white p-4 rounded-lg w-[90vw] h-[90vh] sm:w-[70vw] sm:h-[70vh] flex items-center justify-center">
@@ -74,27 +141,31 @@ const Property = () => {
                         <button onClick={goToPreviousImage} className="absolute left-4 text-black text-3xl">
                             <FaChevronLeft />
                         </button>
-                        <img src={propImages[currentImageIndex]} alt={`Property ${currentImageIndex + 1}`} className="w-full h-full object-cover rounded-lg" />
+                        {images[currentImageIndex]?.is360 ? (
+              <div id="panolens-container" ref={panolensContainerRef} className="w-full h-full"></div>
+            ) : (
+                            <img src={images[currentImageIndex].image} alt={`Property ${currentImageIndex + 1}`} className="w-full h-full object-cover rounded-lg" />
+                        )}
                         <button onClick={goToNextImage} className="absolute right-4 text-black text-3xl">
                             <FaChevronRight />
                         </button>
                     </div>
                 </div>
             )}
-        <div className="text-lg breadcrumbs mx-8 mb-8">
-        <ul>
-            <li><a href="/" className="text-[#242424] hover:text-[#F9A826] transition-all">Home</a></li>
-            <li><a href="/find" className="text-[#242424] hover:text-[#F9A826] transition-all">Find Property</a></li>
-        </ul>
-    </div>
-    <div className="relative mx-8 p-6 sm:p-8 bg-slate-200 rounded-xl max-sm:block max-sm:h-[90vw] grid grid-cols-1 sm:h-[35rem] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-evenly">
-                {propImages.slice(0, displayedImages).map((image, index) => (
+            <div className="text-lg breadcrumbs mx-8 mb-8">
+                <ul>
+                    <li><a href="/" className="text-[#242424] hover:text-[#F9A826] transition-all">Home</a></li>
+                    <li><a href="/find" className="text-[#242424] hover:text-[#F9A826] transition-all">Find Property</a></li>
+                </ul>
+            </div>
+            <div className="relative mx-8 p-6 sm:p-8 bg-slate-200 rounded-xl max-sm:block max-sm:h-[90vw] grid grid-cols-1 sm:h-[35rem] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-evenly">
+                {images.slice(0, displayedImages).map((image, index) => (
                     <div
                         key={index}
-                        className={`bg-green-500 rounded-lg h-full ${index === 0 ? "col-span-1 md:col-span-2 lg:col-span-2 lg:row-span-2" : ""} overflow-hidden`}
+                        className={`rounded-lg h-full ${index === 0 ? "col-span-1 md:col-span-2 lg:col-span-2 lg:row-span-2" : ""} overflow-hidden`}
                         onClick={() => openModal(index)}
                     >
-                        <img src={image} alt={`Property ${index + 1}`} className="w-full h-full object-cover rounded-lg cursor-pointer" />
+                        <img src={image.image} alt={`Property ${index + 1}`} className="w-full h-full object-cover rounded-lg cursor-pointer" />
                     </div>
                 ))}
                 {additionalImagesCount > 0 && (
@@ -107,7 +178,7 @@ const Property = () => {
 
     <div className="flex items-center justify-between font-raleway text-[4rem] font-bold mx-10 mt-4 max-[706px]:text-[3rem] max-[546px]:text-[2rem]">
         <h1>
-            Property Page
+            {capitalizeFLetter(property?.name)}
         </h1>
         <div className="flex gap-4 mr-8">
         <button
@@ -155,7 +226,7 @@ const Property = () => {
     </div>
     <div className="mx-10 mt-2 font-raleway text-stone-500 text-[1.5rem]  max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
     <h>
-        House no. 236, Block D - Lahore
+        {capitalizeFLetter(property?.address)} - {capitalizeFLetter(property?.city)}, {capitalizeFLetter(property?.country)}
     </h>
     
 </div>
@@ -167,7 +238,9 @@ const Property = () => {
             </div>
             <div className="flex items-center my-2 gap-4 font-raleway  text-[1.5rem] font-bold   max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
             <FaHouse className="text-stone-500" />
-                <h1 className="text-black">House</h1>
+                <h1 className="text-black">
+                    {capitalizeFLetter(property?.type)}
+                </h1>
             </div>
         </div>
         <div className=" flex pl-6 flex-col justify-center col-span-1 bg-white border border-slate-300 h-full">
@@ -176,7 +249,9 @@ const Property = () => {
             </div>
             <div className="flex items-center my-2 gap-4 font-raleway  text-[1.5rem] font-bold   max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
             <FaStairs className="text-stone-500" />
-                <h1 className="text-black">Two</h1>
+                <h1 className="text-black">
+                    { capitalizeFLetter(numberToWord(property?.storeys))}
+                </h1>
             </div>
         </div>
         <div className="flex pl-6 flex-col justify-center col-span-1 bg-white border border-slate-300 h-full">
@@ -185,7 +260,7 @@ const Property = () => {
             </div>
             <div className="flex items-center my-2 gap-4 font-raleway  text-[1.5rem] font-bold   max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
             <FaBed className="text-stone-500" />
-                <h1 className="text-black">Four</h1>
+                <h1 className="text-black">{ capitalizeFLetter(numberToWord(property?.bedrooms))}</h1>
             </div>
         </div>
         <div className="flex pl-6 flex-col justify-center col-span-1 bg-white border border-slate-300 h-full">
@@ -194,7 +269,7 @@ const Property = () => {
             </div>
             <div className="flex items-center my-2 gap-4 font-raleway  text-[1.5rem] font-bold   max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
             <PiToilet className="text-stone-500" />
-                <h1 className="text-black">Five</h1>
+                <h1 className="text-black">{ capitalizeFLetter(numberToWord(property?.bathrooms))}</h1>
             </div>
         </div>
         <div className="flex pl-6 flex-col justify-center col-span-1 bg-white border border-slate-300 h-full">
@@ -203,7 +278,9 @@ const Property = () => {
             </div>
             <div className="flex items-center my-2 gap-4 font-raleway  text-[1.5rem] font-bold   max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
             <FaCar className="text-stone-500" />
-                <h1 className="text-black">Yes</h1>
+            <h1 className="text-black">
+            {property?.parking_space ? "Yes" : "No"}
+        </h1>
             </div>
         </div>
         <div className="flex pl-6 flex-col justify-center col-span-1 bg-white border border-slate-300 h-full rounded-r-xl">
@@ -212,7 +289,7 @@ const Property = () => {
             </div>
             <div className="flex items-center my-2 gap-4 font-raleway  text-[1.5rem] font-bold   max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
             <LiaChartAreaSolid className="text-stone-500" />
-                <h1 className="text-black">10 Marla</h1>
+                <h1 className="text-black">{property?.area} {capitalizeFLetter(property?.area_unit)}</h1>
             </div>                         
         </div>
     </div>
@@ -220,15 +297,15 @@ const Property = () => {
             Description
         </h1>
         <p className="font-raleway text-stone-500 text-[1.2rem]  mx-10 max-[706px]:text-[1.2rem] max-[546px]:text-[1rem]">
-            Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget nunc nec risus tincidunt lacinia. In hac habitasse platea dict Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget nunc nec risus tincidunt lacinia. In hac habitasse platea dict consectetur adipiscing elit. Donec eget nunc nec risus tincidunt lacinia. In hac habitasse platea dictLorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget nunc nec risus tincidunt lacinia. In hac habitasse platea dictLorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget nunc nec risus tincidunt lacinia. In hac habitasse platea dictLorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget nunc nec risus tincidunt lacinia. In hac habitasse platea dict
-        </p>
+            {capitalizeFLetter(property?.description)}
+            </p>
 
         <div className="flex flex-col items-end mx-8">
         <h1 className="font-raleway text-stone-500 text-[1.2rem] font-bold mx-10 mt-8 max-[706px]:text-[1.2rem] max-[546px]:text-[1rem]">
         Seller's Quote
         </h1>
             <h1 className="font-raleway text-[2.5rem] font-bold mx-10  max-[706px]:text-[2.5rem] max-[546px]:text-[2rem]">
-              $ 200,000/Month
+            PKR {property?.price}{property?.listing_reason === "rent" ? "/Month" : ""}
             </h1>
             <button class="active:scale-95 rounded-2xl mx-8 mt-2  px-6  hover:text-white border border-slate-300 hover:bg-black hover:border-black transition-all py-2 font-raleway font-medium text-black outline-none focus:ring hover:opacity-90">Contact Seller</button>
         </div>

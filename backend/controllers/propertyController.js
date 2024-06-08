@@ -148,3 +148,23 @@ exports.removeProperty = async (req, res) => {
         res.status(500).json({ error: 'Failed to remove property' });
     }
 };
+
+// Find a property by ID and get its images
+exports.getPropertyById = async (req, res) => {
+    try {
+        const propertyId = req.params.id;
+
+        const property = await Property.findOne({
+            where: { id: propertyId }
+        });
+
+        const images = await PropertyImages.findAll({
+            where: { property_id: propertyId }
+        });
+
+        res.json({ property,images});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to find property and images' });
+    }
+};
