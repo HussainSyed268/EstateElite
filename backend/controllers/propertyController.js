@@ -1,5 +1,6 @@
 const Property = require('../models/Property');
 const PropertyImages = require('../models/PropertyImage');
+const { Op } = require('sequelize');
 
 // Add a new property
 exports.addProperty = async (req, res) => {
@@ -213,33 +214,51 @@ exports.getPropertyById = async (req, res) => {
 // find a property with different filters
 exports.findProperty = async (req, res) => {
     try {
-        const {
-            city,
-            country,
+        const { 
+            city, 
             type,
-            minPrice,
-            maxPrice,
-            minArea,
-            maxArea,
-            minBedrooms,
-            maxBedrooms,
-            minBathrooms,
-            maxBathrooms,
-            minParkingSpace,
-            maxParkingSpace
+            area_type,
+            max_area, 
+            storeys,
+            start_price,
+            end_price,
+            listing_reason
         } = req.body;
 
+        // Create a dynamic where clause
+        const whereClause = {
+            status: "approved",
+        };
+
+        if (city) {
+            whereClause.city = city;
+        }
+
+        if (type) {
+            whereClause.type = type;
+        }
+
+        if (area_type && max_area) {
+            whereClause.area_unit = area_type;
+            whereClause.area = { [Op.lte]: max_area };
+        }
+
+        if (storeys) {
+            whereClause.storeys = storeys;
+        }
+
+        if (start_price && end_price) {
+            whereClause.price = { [Op.between]: [start_price, end_price] };
+        }
+
+        if (listing_reason) {
+            whereClause.listing_reason = listing_reason;
+        }
+
+        console.log(whereClause);
         const properties = await Property.findAll({
-            where: {
-                city,
-                country,
-                type,
-                price: { [Op.between]: [minPrice, maxPrice] },
-                area: { [Op.between]: [minArea, maxArea] },
-                bedrooms: { [Op.between]: [minBedrooms, maxBedrooms] },
-                bathrooms: { [Op.between]: [minBathrooms, maxBathrooms] },
-                parking_space: { [Op.between]: [minParkingSpace, maxParkingSpace] }
-            }
+            where: whereClause,
+            attributes: ['id'] 
         });
 
         res.status(200).json({ properties });
@@ -248,5 +267,31 @@ exports.findProperty = async (req, res) => {
         res.status(500).json({ error: 'Failed to find properties' });
     }
 };
+
+// Fetch the only required details for the property that we need after filter
+
+exports.fetchPropertyDetails = async (req, res) => {
+    try {
+        const propertyId = req.params.id;
+
+        const property = await Property.findOne({
+            where: { id: propertyId },
+            attributes: ['id', 'name', 'price', 'description', 'type', 'rating']
+
+        });
+
+        const images = await PropertyImages.findAll({
+            where: { property_id: propertyId, is360: 0},
+            attributes: ['image'],
+            limit: 1
+        });
+
+
+        res.status(200).json({ property, images });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch property details' });
+    }
+}
 
 
