@@ -301,13 +301,6 @@ exports.getAllApprovedProperties = async (req, res) => {
         const properties = await Property.findAll({
             where: { status: 'approved' },
             attributes: ['id', 'name', 'price', 'description', 'type', 'rating'],
-            include: [{
-                model: PropertyImages,
-                attributes: ['image'],
-                where: { is360: 0 },
-                required: false,  // Include properties even if they don't have images
-                limit: 1
-            }]
         });
 
         res.status(200).json({ properties });
@@ -316,3 +309,20 @@ exports.getAllApprovedProperties = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch properties' });
     }
 };
+
+exports.getPropertyImages = async (req, res) => {
+    try {
+        const propertyId = req.params.id;
+
+        const images = await PropertyImages.findAll({
+            where: { property_id: propertyId },
+            attributes: ['image'],
+            limit: 1
+        });
+
+        res.json({ images });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to find property images' });
+    }
+}

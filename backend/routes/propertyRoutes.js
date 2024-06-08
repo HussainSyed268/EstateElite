@@ -26,4 +26,6 @@ router.get('/info/:id', propertyController.fetchPropertyDetails);
 
 router.post('/all', propertyController.getAllApprovedProperties);
 
+router.post('/images/:id', propertyController.getPropertyImages)
+
 module.exports = router;
