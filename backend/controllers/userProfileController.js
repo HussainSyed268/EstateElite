@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const UserProfile = require('../models/UserProfile');
+const Property = require('../models/Property');
+const PropertyImages = require('../models/PropertyImage');
 
 
 exports.getUserDetails = async (req, res) => {
@@ -67,5 +69,36 @@ exports.UpdateUserDetails = async (req, res) => {
     catch(error){
         console.error('Failed to update user details:', error);
         res.status(500).json({ message: 'Failed to update user details' });
+    }
+}
+
+exports.getUserProperties = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const properties = await Property.findAll({ 
+            where: { seller_id: userId, status: "approved" } 
+        });
+        res.status(200).json({ properties });
+    } catch (error) {
+        console.error('Failed to get user properties:', error);
+        res.status(500).json({ message: 'Failed to get user properties' });
+    }
+}
+
+//Delete a whole property with all its images
+
+exports.deleteUserProperty = async (req, res) => {
+    try {
+        const propertyId = req.params.id;
+        const property = await Property.findByPk(propertyId);
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
+        }
+        await PropertyImages.destroy({ where: { property_id: propertyId } });
+        await property.destroy();
+        res.status(200).json({ message: 'Property deleted successfully' });
+    } catch (error) {
+        console.error('Failed to delete property:', error);
+        res.status(500).json({ message: 'Failed to delete property' });
     }
 }
