@@ -13,10 +13,17 @@ router.delete('/remove/:id', propertyController.removeProperty);
 
 
 //Filter 
-router.get('/filter', propertyController.findProperty);
+router.post('/filter', propertyController.findProperty);
 
 // Route to get a property by ID
 router.get('/:id', propertyController.getPropertyById);
 
+//Route to fetch property info for property card
+router.get('/info/:id', propertyController.fetchPropertyDetails);
+
+
+// Route to get all approved properties for cards
+
+router.post('/all', propertyController.getAllApprovedProperties);
 
 module.exports = router;

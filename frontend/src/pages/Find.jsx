@@ -1,43 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Filter from "../components/Filter.jsx";
 import PropertyCard from "../components/Propertycard.jsx";
 import Property1 from "../assets/property1.jpg";
+import axios from "axios";
 
 const Find = () => {
-    // Sample data for property cards
-    const properties = [
-        { id: 1, img: Property1, title: "Luxury Villa", description: "A beautiful luxury villa with a swimming pool.", type: "Villa", price: "25,000,000" },
-        { id: 2, img: Property1, title: "Modern Apartment", description: "A modern apartment in the heart of the city.", type: "Apartment", price: "8,500,000" },
-        { id: 3, img: Property1, title: "Cozy Cottage", description: "A cozy cottage in the countryside.", type: "Cottage", price: "4,200,000" },
-        { id: 4, img: Property1, title: "Spacious Bungalow", description: "A spacious bungalow with a large garden.", type: "Bungalow", price: "15,000,000" },
-        { id: 5, img: Property1, title: "Beach House", description: "A beach house with stunning ocean views.", type: "House", price: "20,000,000" },
-        { id: 6, img: Property1, title: "Penthouse Suite", description: "A luxurious penthouse suite.", type: "Apartment", price: "30,000,000" },
-        { id: 7, img: Property1, title: "Suburban Home", description: "A suburban home in a quiet neighborhood.", type: "House", price: "10,000,000" },
-        { id: 8, img: Property1, title: "Country Farmhouse", description: "A charming farmhouse with acres of land.", type: "Farmhouse", price: "12,000,000" },
-        { id: 9, img: Property1, title: "Downtown Loft", description: "A trendy loft in the downtown area.", type: "Loft", price: "9,000,000" },
-        { id: 10, img: Property1, title: "Historic Mansion", description: "A historic mansion with classic architecture.", type: "Mansion", price: "40,000,000" },
-        { id: 11, img: Property1, title: "Studio Apartment", description: "A compact and efficient studio apartment.", type: "Apartment", price: "5,000,000" },
-        { id: 12, img: Property1, title: "Mountain Cabin", description: "A cozy cabin in the mountains.", type: "Cabin", price: "7,500,000" },
-        { id: 13, img: Property1, title: "Urban Condo", description: "A sleek condo in the urban center.", type: "Condo", price: "11,000,000" },
-        { id: 14, img: Property1, title: "Family Home", description: "A perfect family home with a backyard.", type: "House", price: "9,500,000" },
-        { id: 15, img: Property1, title: "Luxury Apartment", description: "An upscale apartment with modern amenities.", type: "Apartment", price: "14,000,000" },
-        { id: 16, img: Property1, title: "Waterfront Villa", description: "A stunning villa on the waterfront.", type: "Villa", price: "35,000,000" },
-        { id: 17, img: Property1, title: "High-rise Apartment", description: "A high-rise apartment with city views.", type: "Apartment", price: "13,000,000" },
-        { id: 18, img: Property1, title: "Ranch House", description: "A spacious ranch house with open land.", type: "House", price: "18,000,000" },
-        { id: 19, img: Property1, title: "Elegant Townhouse", description: "An elegant townhouse in a prime location.", type: "Townhouse", price: "16,000,000" },
-        { id: 20, img: Property1, title: "Green Home", description: "An eco-friendly home with sustainable features.", type: "House", price: "22,000,000" },
-        { id: 21, img: Property1, title: "Modern Loft", description: "A modern loft with an open floor plan.", type: "Loft", price: "10,000,000" },
-        { id: 22, img: Property1, title: "Rustic Cabin", description: "A rustic cabin with a wood-burning stove.", type: "Cabin", price: "6,000,000" },
-        { id: 23, img: Property1, title: "City Penthouse", description: "A penthouse with panoramic city views.", type: "Penthouse", price: "28,000,000" },
-        { id: 24, img: Property1, title: "Luxury Condo", description: "A luxury condo with top amenities.", type: "Condo", price: "19,000,000" },
-        { id: 25, img: Property1, title: "Seaside Villa", description: "A villa with direct access to the beach.", type: "Villa", price: "33,000,000" },
-        { id: 26, img: Property1, title: "Urban Studio", description: "A compact studio in a bustling area.", type: "Studio", price: "4,500,000" },
-        { id: 27, img: Property1, title: "Charming Cottage", description: "A charming cottage with a lovely garden.", type: "Cottage", price: "7,000,000" },
-        { id: 28, img: Property1, title: "Downtown Apartment", description: "An apartment in a prime downtown location.", type: "Apartment", price: "12,000,000" },
-        { id: 29, img: Property1, title: "Eco Villa", description: "An eco-friendly villa with solar panels.", type: "Villa", price: "26,000,000" },
-        { id: 30, img: Property1, title: "Spacious Townhouse", description: "A townhouse with a spacious interior.", type: "Townhouse", price: "17,000,000" }
-    ];
+    const [filteredProperties, setFilteredProperties] = useState([]);
+
+    const properties_ids = [];
+    const [properties, setProperties] = useState([]);
+
+  
+
+
+    const handleFilteredProperties = (properties_ids) => {
+        setFilteredProperties(properties_ids);
+        const propertyIds = properties_ids.map(property => property.id);
+        console.log(propertyIds);
+
+        propertyIds.forEach((id) => {
+            console.log(id);
+            axios.get(`/api/property/info/${id}`)
+                .then((response) => {
+                    // Assuming properties is a state variable holding the fetched properties
+                    setProperties( [
+                        {
+                            id: response.data.property.id,
+                            img: response.data.images[0].image,
+                            title: response.data.property.name,
+                            description: response.data.property.description,
+                            type: response.data.property.type,
+                            price: response.data.property.price,
+                            rating: response.data.property.rating
+                        },
+                    ]);
+                    console.log(properties);
+                })
+                .catch((error) => {
+                    console.error(`Failed to fetch property with ID ${id}:`, error);
+                });
+        });
+    };
     
+
+    
+    useEffect(() => {
+        // This effect will run whenever properties state changes
+        // You can perform any additional actions here if needed
+    }, [handleFilteredProperties]);
+
+
     
     const [currentPage, setCurrentPage] = useState(1);
     const cardsPerPage = 12;
@@ -70,7 +82,7 @@ const Find = () => {
             <div className="font-raleway text-[4rem] font-bold mx-8 mt-4 max-[706px]:text-[3rem] max-[706px]:text-center max-[546px]:text-[2rem]">
                 Find your next <span className="text-[#F9A826] font-philosopher">Home</span>
             </div>
-            <Filter />
+            <Filter onFilteredProperties={handleFilteredProperties} />
             <div className="flex flex-wrap justify-around gap-8 mx-8 mt-16 mb-8">
                 {currentCards.map((property) => (
                     <PropertyCard
@@ -80,6 +92,7 @@ const Find = () => {
                         description={property.description}
                         type={property.type}
                         price={property.price}
+                        rating = {property.rating}
                     />
                 ))}
             </div>
