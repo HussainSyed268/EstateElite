@@ -121,7 +121,6 @@ const AddProperty = () => {
 
     
 
-
     return(
 
         <>
@@ -169,15 +168,17 @@ const AddProperty = () => {
             <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
                 Property Name
             </h1>
-            <input type="text" onChange={(e)=>{setName(e.target.value)} } placeholder="Enter property name" className="max-[750px]:w-full w-[80%] border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
+            <input value={name} type="text" onChange={(e)=>{setName(e.target.value)} } placeholder="Enter property name" className="max-[750px]:w-full w-[80%] border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
             <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
                 Property Address
             </h1>
             <input type="text" 
+            value={address}
             onChange={(e)=>{setAddress(e.target.value)}}
               placeholder="Enter property address" className="max-[750px]:w-full w-[80%] border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
             <div className="flex">
                 <select
+                    value={city}
                     id="city"
                     className="mt-4 block w-[15rem] mr-4 rounded-md border bg-white border-gray-300 px-2 py-2 shadow-sm outline-none focus:border-black focus:ring focus:ring-black focus:ring-opacity-50"
                     onChange={(e)=>{setCity(e.target.value)}}
@@ -206,6 +207,7 @@ const AddProperty = () => {
             </h1>
             <div className="max-[750px]:flex-wrap inline-flex items-center p-2 gap-6 rounded-md cursor-pointer text-gray-800 font-raleway">
             <input
+                
                 id="1storey"
                 type="radio"
                 name="toggle"
@@ -447,6 +449,7 @@ const AddProperty = () => {
             Reason of Listing
             </h1>
             <select
+                    value={listingReason}
                     id="city"
                     className="mt-2 block h-[3rem] w-[15rem] mr-4 rounded-md border bg-white border-gray-300 px-2 py-2 shadow-sm outline-none focus:border-black focus:ring focus:ring-black focus:ring-opacity-50"
                     onChange={(e)=>{setListingReason(e.target.value)}}
@@ -463,6 +466,7 @@ const AddProperty = () => {
             </h1>
             <div className="flex">
                     <input
+
                         type="number"
                         id="area"
                         placeholder="Enter area"
@@ -487,6 +491,7 @@ const AddProperty = () => {
             Parking Space
             </h1>
             <select
+            value={parkingSpace}
                     id="city"
                     className="mt-2 block h-[3rem] w-[15rem] mr-4 rounded-md border bg-white border-gray-300 px-2 py-2 shadow-sm outline-none focus:border-black focus:ring focus:ring-black focus:ring-opacity-50"
                     onChange={(e)=>{if (e.target.value === "true") {
@@ -506,6 +511,7 @@ const AddProperty = () => {
             Property Description
             </h1>          
             <textarea
+            value={description}
             onChange={(e)=>{setDescription(e.target.value)}}
             placeholder="Enter property description" className="max-[750px]:w-full w-[80%] min-h-[10rem] resize-none border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
         <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
@@ -513,6 +519,7 @@ const AddProperty = () => {
             </h1> 
             <div className="flex justify-between items-center w-[20.5rem]">
             <input 
+            value={price}
             onChange={(e)=>{setPrice(e.target.value)}}
              type="text" placeholder="Enter quoted price" className="w-[15rem] border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
               {listingReason === "rent" && (
