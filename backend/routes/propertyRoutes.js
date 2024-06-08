@@ -24,6 +24,6 @@ router.get('/info/:id', propertyController.fetchPropertyDetails);
 
 // Route to get all approved properties for cards
 
-router.get('/all', propertyController.getAllApprovedProperties);
+router.post('/all', propertyController.getAllApprovedProperties);
 
 module.exports = router;

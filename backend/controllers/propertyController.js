@@ -295,3 +295,24 @@ exports.fetchPropertyDetails = async (req, res) => {
 }
 
 
+// Get all approved properties for cards
+exports.getAllApprovedProperties = async (req, res) => {
+    try {
+        const properties = await Property.findAll({
+            where: { status: 'approved' },
+            attributes: ['id', 'name', 'price', 'description', 'type', 'rating'],
+            include: [{
+                model: PropertyImages,
+                attributes: ['image'],
+                where: { is360: 0 },
+                required: false,  // Include properties even if they don't have images
+                limit: 1
+            }]
+        });
+
+        res.status(200).json({ properties });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch properties' });
+    }
+};
