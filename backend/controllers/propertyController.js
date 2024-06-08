@@ -189,6 +189,7 @@ exports.findProperty = async (req, res) => {
     }
 };
 
+
 // Find a property by ID and get its images
 exports.getPropertyById = async (req, res) => {
     try {
@@ -208,4 +209,44 @@ exports.getPropertyById = async (req, res) => {
         res.status(500).json({ error: 'Failed to find property and images' });
     }
 };
+
+// find a property with different filters
+exports.findProperty = async (req, res) => {
+    try {
+        const {
+            city,
+            country,
+            type,
+            minPrice,
+            maxPrice,
+            minArea,
+            maxArea,
+            minBedrooms,
+            maxBedrooms,
+            minBathrooms,
+            maxBathrooms,
+            minParkingSpace,
+            maxParkingSpace
+        } = req.body;
+
+        const properties = await Property.findAll({
+            where: {
+                city,
+                country,
+                type,
+                price: { [Op.between]: [minPrice, maxPrice] },
+                area: { [Op.between]: [minArea, maxArea] },
+                bedrooms: { [Op.between]: [minBedrooms, maxBedrooms] },
+                bathrooms: { [Op.between]: [minBathrooms, maxBathrooms] },
+                parking_space: { [Op.between]: [minParkingSpace, maxParkingSpace] }
+            }
+        });
+
+        res.status(200).json({ properties });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to find properties' });
+    }
+};
+
 

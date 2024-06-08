@@ -19,4 +19,7 @@ router.get('/filter', propertyController.findProperty);
 router.get('/:id', propertyController.getPropertyById);
 
 
+//Filter 
+router.get('/filter', propertyController.findProperty);
+
 module.exports = router;
