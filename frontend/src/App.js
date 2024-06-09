@@ -19,6 +19,7 @@ import UpdateProfile from "./components/UpdateProfile";
 import ManageUserPage from "./pages/ManageUserPage";
 import { ThemeProvider } from "@mui/system";
 import theme from "./theme";
+import About from './pages/About';
 
 import SavedProperties from './components/SavedProperties';
 import ListedProperties from './components/ListedProperties';
@@ -61,6 +62,7 @@ function Main() {
                     <Route path="/savedproperties" element={<SavedProperties />} />
                     <Route path="/listedproperties" element={<ListedProperties />} />
                     <Route path="/updateprofile" element={<UpdateProfile />} />
+                    <Route path="/about" element={<About />} />
                     {/* <Route path="/logout" element={<Logout />} /> Create a Logout component or handle logout logic */}
                     
                     <Route path="/admin" element={<AdminLayout />}>
@@ -69,6 +71,7 @@ function Main() {
                         <Route path="users" element={<ManageUserPage />} />
                         <Route path="account" element={<UpdateProfile />} />
                         <Route path="approval" element={<Approval />} />
+                        
                     </Route>
                 </Routes>
             </div>
