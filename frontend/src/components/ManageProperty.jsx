@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -80,7 +81,11 @@ export default function ManageProperty({
                       <Avatar src={row.avatar} />
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    <Link to={`/property/${row.id}`}>
+                      {row.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>
                     {row.address}, {row.city}, {row.country}
                   </TableCell>
