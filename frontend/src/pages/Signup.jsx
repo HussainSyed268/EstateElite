@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/logo3.png';
@@ -18,7 +18,7 @@ const SignUp = () => {
         });
     }
 
-    const { register } = useContext(AuthContext);
+    const { register,auth } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -44,6 +44,17 @@ const SignUp = () => {
             generateError("Sign-up failed");
         }
     };
+
+    useEffect(() => {
+        if (auth.user){
+            if (auth.user.role === 'admin'){
+                window.location = '/admin';
+            } else {
+                window.location = '/';
+            }
+        }
+    }
+    , [auth.user]);
 
     return (
         <section className="bg-white">
