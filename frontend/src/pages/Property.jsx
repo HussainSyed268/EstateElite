@@ -11,10 +11,11 @@ import { useParams } from "react-router-dom";
 import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
 import Rating from '@mui/material/Rating';
+import SellerDetailsModal from "../components/sellerDetailsModal";
 import * as PANOLENS from "panolens";
 
 const Property = () => {
-    const {auth} = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
     const { propertyId } = useParams();
     const [property, setProperty] = useState(null);
     const [images, setImages] = useState([]);
@@ -24,8 +25,10 @@ const Property = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const panolensContainerRef = useRef(null);
     const [rating, setRating] = useState(0);
-    const [userRating, setUserRating] = useState(0); //
+    const [userRating, setUserRating] = useState(0);
+    const [isSellerModalOpen, setIsSellerModalOpen] = useState(false); // State for seller modal
     let viewer;
+    const user = auth.user;
 
     
 
@@ -262,7 +265,7 @@ const Property = () => {
                         
                     </button>
             
-
+{auth.user &&
         <button
                     onClick={toggleSave}
                     className={`flex items-center justify-center w-12 h-12 bg-white border-gray-400 border rounded-full hover:text-[#F9A826] ${isSaved ? "text-[#F9A826]" : "text-gray-400"}`}
@@ -282,13 +285,16 @@ const Property = () => {
                         ></path>
                     </svg>
                 </button>
+}
 </div>
     </div>
     <div className="flex justify-between mx-10 mt-2 font-raleway text-stone-500 text-[1.5rem]  max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
     <h>
         {capitalizeFLetter(property?.address)} - {capitalizeFLetter(property?.city)}, {capitalizeFLetter(property?.country)}
     </h>
+    {auth.user &&
     <Rating className="mr-8" name="half-rating" defaultValue={property.rating} onChange={handleRatingChange} precision={0.25} size="large"/>
+    }
 </div>
 
     <div className="grid xl:grid-cols-6 lg:grid-cols-3 sm:grid-cols-2  rounded-xl bg-slate-300 mt-12 mx-12 md:h-[15rem] lg:h-[12rem] xl:h-[8rem]">
@@ -367,7 +373,12 @@ const Property = () => {
             <h1 className="font-raleway text-[2.5rem] font-bold mx-10  max-[706px]:text-[2.5rem] max-[546px]:text-[2rem]">
             PKR {property?.price}{property?.listing_reason === "rent" ? "/Month" : ""}
             </h1>
-            <button class="active:scale-95 rounded-2xl mx-8 mt-2  px-6  hover:text-white border border-slate-300 hover:bg-black hover:border-black transition-all py-2 font-raleway font-medium text-black outline-none focus:ring hover:opacity-90">Contact Seller</button>
+            <button onClick={() => setIsSellerModalOpen(true)} class="active:scale-95 rounded-2xl mx-8 mt-2  px-6  hover:text-white border border-slate-300 hover:bg-black hover:border-black transition-all py-2 font-raleway font-medium text-black outline-none focus:ring hover:opacity-90">Contact Seller</button>
+            <SellerDetailsModal
+                                    sellerId={property.seller_id}
+                                    isOpen={isSellerModalOpen}
+                                    onClose={() => setIsSellerModalOpen(false)}
+                                />
         </div>
         <PropertyCarousel title="Properties in Same Area" />
 

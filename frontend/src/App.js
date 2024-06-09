@@ -1,7 +1,7 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
-import { AdminProvider, AdminContext } from './context/AdminContext';
+import { AdminProvider } from './context/AdminContext';
 import Login from './pages/Login';
 import Register from './pages/Signup';
 import Home from './pages/Home';
@@ -30,46 +30,45 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
     return (
         <AuthProvider>
-        <AdminProvider>
-            <ThemeProvider theme={theme}>
-                <Router>
-                    <Main />
-                    <ToastContainer />
-                </Router>
-            </ThemeProvider>
-        </AdminProvider>
+            <AdminProvider>
+                <ThemeProvider theme={theme}>
+                    <Router>
+                        <Main />
+                        <ToastContainer />
+                    </Router>
+                </ThemeProvider>
+            </AdminProvider>
         </AuthProvider>
     );
 }
 
 function Main() {
     const location = useLocation();
+    const { auth } = useContext(AuthContext);
     const isAdminRoute = location.pathname.startsWith('/admin');
     const noFooterRoutes = ['/login', '/signup'];
-    const { auth } = useContext(AuthContext);
     const shouldHideFooter = noFooterRoutes.includes(location.pathname);
     const isLoginOrSignup = ['/login', '/signup'].includes(location.pathname);
 
-
     return (
         <>
-            {(auth.user && auth.user.role === "customer") &&  <Navbar />}
-            {isLoginOrSignup &&  <Navbar/>}
+            <Navbar />
             <div className=''>
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Register />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/find" element={<Find />} />
+                    <Route path="/property/:propertyId" element={<Property />} />
+                    <Route path="/contact-us" element={<ContactUs />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/add-property" element={<AddProperty />} />
 
                     {auth.user && auth.user.role === 'customer' && (
                         <>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/find" element={<Find />} />
-                            <Route path="/property/:propertyId" element={<Property />} />
-                            <Route path="/add-property" element={<AddProperty />} />
                             <Route path="/savedproperties" element={<SavedProperties />} />
                             <Route path="/listedproperties" element={<ListedProperties />} />
                             <Route path="/updateprofile" element={<UpdateProfile />} />
-                            <Route path="/contact-us" element={<ContactUs />} />
                             {/* if any other route than redirect back to home */}
                             <Route path="*" element={<Home />} />
                         </>
@@ -77,24 +76,23 @@ function Main() {
 
                     {auth.user && auth.user.role === 'admin' && (
                         <>
-                        <Route path="/property/:propertyId" element={<Property />} />
-                        <Route path="/admin/*" element={<AdminLayout />}>
-                            <Route index element={<Dashboard />} />
-                            <Route path="properties" element={<ManagePropertyPage />} />
-                            <Route path="users" element={<ManageUserPage />} />
-                            <Route path="account" element={<UpdateProfile />} />
-                            <Route path="approval" element={<Approval />} />
-                            {/* if any other route even outside admin than redirect back to admin */}
-                            <Route path="*" element={<Dashboard />} />
-                        </Route>
+                            <Route path="/property/:propertyId" element={<Property />} />
+                            <Route path="/admin/*" element={<AdminLayout />}>
+                                <Route index element={<Dashboard />} />
+                                <Route path="properties" element={<ManagePropertyPage />} />
+                                <Route path="users" element={<ManageUserPage />} />
+                                <Route path="account" element={<UpdateProfile />} />
+                                <Route path="approval" element={<Approval />} />
+                                {/* if any other route even outside admin than redirect back to admin */}
+                                <Route path="*" element={<Dashboard />} />
+                            </Route>
                         </>
                     )}
                 </Routes>
             </div>
-            {auth.user && auth.user.role === "customer" && !shouldHideFooter && <Footer />}
+            {!shouldHideFooter && <Footer />}
         </>
     );
 }
-
 
 export default App;
