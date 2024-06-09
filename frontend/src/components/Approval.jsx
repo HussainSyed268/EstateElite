@@ -17,6 +17,7 @@ import axios from "axios";
         // Map over the data to extract only the required fields             
         const filteredOrders = data.map(property => ({
           id: property.id, // Removed the 'ORD-' prefix
+          name: property.name,
           customer: { name: property.User.username },
           status: property.status,
           createdAt: new Date(property.created_at),

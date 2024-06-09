@@ -46,13 +46,12 @@ function Main() {
     const location = useLocation();
     const { auth } = useContext(AuthContext);
     const isAdminRoute = location.pathname.startsWith('/admin');
-    const noFooterRoutes = ['/login', '/signup'];
-    const shouldHideFooter = noFooterRoutes.includes(location.pathname);
-    const isLoginOrSignup = ['/login', '/signup'].includes(location.pathname);
+    const noFooterRoutes = ['/login', '/signup']; // Added '/admin' to noFooterRoutes
+    const shouldHideFooter = noFooterRoutes.some(route => location.pathname.startsWith(route)); // Changed to .some()
 
     return (
         <>
-            <Navbar />
+            {!isAdminRoute && <Navbar />} {/* Render Navbar only if not on admin route */}
             <div className=''>
                 <Routes>
                     <Route path="/login" element={<Login />} />
@@ -90,9 +89,10 @@ function Main() {
                     )}
                 </Routes>
             </div>
-            {!shouldHideFooter && <Footer />}
+            {!shouldHideFooter || isAdminRoute && <Footer />} {/* Hide footer if on routes specified in noFooterRoutes */}
         </>
     );
 }
+
 
 export default App;

@@ -149,7 +149,7 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
                     <Link to={`/property/${order.id}`}>
                       <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                         <Avatar src={order.avatar} />
-                        <span>{order.id}</span>
+                        <span>{order.name}</span>
                       </Stack>
                     </Link>
                   </TableCell>

@@ -42,7 +42,7 @@ export default function Sidebar() {
                         </li>
                         <li className="flex items-center hover:bg-gray-800 rounded-md transition duration-200 text-inherit">
                             <img className={`w-6 h-6 mr-4 ${isExpanded ? 'opacity-100' : 'opacity-0'}`} src={Approval} alt="Products" />
-                            <a href="/admin/approval" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>Properties Approval</a>
+                            <a href="/admin/approval" className={`text-white hover:text-[#F9A826] block py-3 transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>Approve Pending Properties</a>
                         </li>
                         <li className="flex items-center hover:bg-gray-800 rounded-md transition duration-200 text-inherit">
                             <img className={`w-6 h-6 mr-4 ${isExpanded ? 'opacity-100' : 'opacity-0'}`} src={Settings} alt="Orders" />

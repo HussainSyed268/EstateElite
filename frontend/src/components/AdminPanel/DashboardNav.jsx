@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React, { useState, useContext } from "react";
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -9,13 +9,15 @@ import { Bell as BellIcon } from '@phosphor-icons/react/dist/ssr/Bell';
 import { List as ListIcon } from '@phosphor-icons/react/dist/ssr/List';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { usePopover } from '../../hooks/use-popover';
+import { AuthContext } from "../../context/AuthContext.js";
 
 import { MobileNav } from './mobile-nav';
 import { UserPopover } from './user-popover.jsx';
 
 export function DashboardNav(){
-  const [openNav, setOpenNav] = React.useState(false);
-
+  const [openNav, setOpenNav] = useState(false);
+  const { auth } = useContext(AuthContext);
+  const { user, token } = auth;
   const userPopover = usePopover();
 
   return (
@@ -57,7 +59,7 @@ export function DashboardNav(){
             <Avatar
               onClick={userPopover.handleOpen}
               ref={userPopover.anchorRef}
-              src="/assets/avatar.png"
+              src={user.profile.profile_picture}
               sx={{ cursor: 'pointer' }}
             />
           </Stack>
