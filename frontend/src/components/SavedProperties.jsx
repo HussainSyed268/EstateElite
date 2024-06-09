@@ -62,7 +62,7 @@ const SavedProperties = () => {
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold text-center">Saved Properties</h1>
+            <h1 className="text-4xl font-bold text-center font-raleway">Saved Properties</h1>
             {properties.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-5 mt-10">
                     {properties.map((property) => (

@@ -64,7 +64,7 @@ function ListedProperties() {
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold text-center">Listed Properties</h1>
+            <h1 className="text-4xl font-bold text-center font-raleway">Listed Properties</h1>
             {selectedProperties.length > 0 && (
                 <button
                     className="mt-5 mb-5 px-4 py-2 bg-red-600 text-white rounded-lg"
