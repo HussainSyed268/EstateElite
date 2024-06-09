@@ -1,58 +1,67 @@
 import React, { useState, useEffect } from "react";
 import Filter from "../components/Filter.jsx";
 import PropertyCard from "../components/Propertycard.jsx";
-import Property1 from "../assets/property1.jpg";
 import axios from "axios";
 
 const Find = () => {
     const [filteredProperties, setFilteredProperties] = useState([]);
-
-    const properties_ids = [];
     const [properties, setProperties] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const cardsPerPage = 12;
 
-  
+    // Fetch all approved properties on component mount
+    useEffect(() => {
+        axios.post('/api/property/all')
+            .then((response) => {
+                const allProperties = response.data.properties.map((property) => ({
+                    id: property.id,
+                    title: property.name,
+                    description: property.description,
+                    type: property.type,
+                    price: property.price,
+                    rating: property.rating,
+                }));
 
+                // Fetch images for each property
+                Promise.all(
+                    allProperties.map((property) =>
+                        axios.get(`/api/property/info/${property.id}`)
+                            .then((response) => ({
+                                ...property,
+                                img: response.data.images[0]?.image || null,
+                            }))
+                    )
+                ).then((propertiesWithImages) => {
+                    setProperties(propertiesWithImages);
+                });
+            })
+            .catch((error) => {
+                console.error('Failed to fetch properties:', error);
+            });
+    }, []);
 
     const handleFilteredProperties = (properties_ids) => {
-        setFilteredProperties(properties_ids);
         const propertyIds = properties_ids.map(property => property.id);
         console.log(propertyIds);
 
-        propertyIds.forEach((id) => {
-            console.log(id);
-            axios.get(`/api/property/info/${id}`)
-                .then((response) => {
-                    // Assuming properties is a state variable holding the fetched properties
-                    setProperties( [
-                        {
-                            id: response.data.property.id,
-                            img: response.data.images[0].image,
-                            title: response.data.property.name,
-                            description: response.data.property.description,
-                            type: response.data.property.type,
-                            price: response.data.property.price,
-                            rating: response.data.property.rating
-                        },
-                    ]);
-                    console.log(properties);
-                })
-                .catch((error) => {
-                    console.error(`Failed to fetch property with ID ${id}:`, error);
-                });
+        // Fetch details of each filtered property and update the state
+        Promise.all(propertyIds.map(id =>
+            axios.get(`/api/property/info/${id}`).then((response) => ({
+                id: response.data.property.id,
+                img: response.data.images[0]?.image || null,
+                title: response.data.property.name,
+                description: response.data.property.description,
+                type: response.data.property.type,
+                price: response.data.property.price,
+                rating: response.data.property.rating,
+            }))
+        )).then((filteredProperties) => {
+            setFilteredProperties(filteredProperties);
+            setProperties(filteredProperties); // Set only the filtered properties
+        }).catch((error) => {
+            console.error('Failed to fetch filtered properties:', error);
         });
     };
-    
-
-    
-    useEffect(() => {
-        // This effect will run whenever properties state changes
-        // You can perform any additional actions here if needed
-    }, [handleFilteredProperties]);
-
-
-    
-    const [currentPage, setCurrentPage] = useState(1);
-    const cardsPerPage = 12;
 
     // Calculate the indices of the cards to be shown on the current page
     const indexOfLastCard = currentPage * cardsPerPage;
@@ -86,13 +95,13 @@ const Find = () => {
             <div className="flex flex-wrap justify-around gap-8 mx-8 mt-16 mb-8">
                 {currentCards.map((property) => (
                     <PropertyCard
-                        key={property.id}
+                        id={property.id}
                         img={property.img}
                         title={property.title}
                         description={property.description}
                         type={property.type}
                         price={property.price}
-                        rating = {property.rating}
+                        rating={property.rating}
                     />
                 ))}
             </div>

@@ -6,29 +6,36 @@ import PendingProperties from "./PendingProperties";
 import Grid from '@mui/material/Grid';
 import dayjs from "dayjs";
 import { AdminContext } from "../context/AdminContext";
+import axios from "axios";
 
 export default function Dashboard() {
   const { getPendingProperties, getApprovedProperties } = useContext(AdminContext);
   const [pendingOrders, setPendingOrders] = useState([]);
   const [approvedProperties, setApprovedProperties] = useState([]);
 
-  useEffect(() => {
-    const fetchPendingProperties = async () => {
-      try {
-        const data = await getPendingProperties();
-        const filteredOrders = data.map(property => ({
-          id: property.id,
-          customer: { name: property.User.username },
-          status: property.status,
-          createdAt: new Date(property.created_at),
-        }));
-        setPendingOrders(filteredOrders);
-      } catch (error) {
-        console.error('Failed to fetch pending properties:', error);
-      }
-    };
+  const placeholderAvatar = 'https://via.placeholder.com/150'; // Placeholder image URL
 
-    fetchPendingProperties();
+  useEffect(() => {
+    getPendingProperties().then(async (data) => {
+      // Map over the data to extract only the required fields             
+      const filteredOrders = data.map(property => ({
+        id: property.id, // Removed the 'ORD-' prefix
+        customer: { name: property.User.username },
+        status: property.status,
+        createdAt: new Date(property.created_at),
+      }));
+
+      // Fetch avatar images for each property
+      const ordersWithAvatars = await Promise.all(
+        filteredOrders.map(async (property) => {
+          const response = await axios.post(`http://localhost:5000/api/property/images/${property.id}`);
+          const avatar = response.data.images[0]?.image || placeholderAvatar;
+          return { ...property, avatar };
+        })
+      );
+
+      setPendingOrders(ordersWithAvatars);
+    });
   }, [getPendingProperties]);
 
   useEffect(() => {
@@ -39,10 +46,17 @@ export default function Dashboard() {
         const filteredProperties = data.map(property => ({
           id: property.id,
           name: property.name,
-          image: property.image,
+          
           location: `${property.city}, ${property.country}`
-        })).slice(0, 6); // Limit to only 5 properties
-        setApprovedProperties(filteredProperties);
+        })).slice(0, 6); // Limit to 6 properties
+        const propertiesWithAvatars = await Promise.all(
+          filteredProperties.map(async (property) => {
+            const response = await axios.post(`http://localhost:5000/api/property/images/${property.id}`);
+            const image = response.data.images[0]?.image || placeholderAvatar;
+            return { ...property, image };
+          })
+        );
+        setApprovedProperties(propertiesWithAvatars);
       } catch (error) {
         console.error('Failed to fetch approved properties:', error);
       }

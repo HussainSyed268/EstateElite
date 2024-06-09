@@ -32,4 +32,7 @@ router.post('/rate', propertyController.rateProperty);
 // Route to get property rating 
 router.get('/rating/:id', propertyController.getRating);
 
+router.post('/images/:id', propertyController.getPropertyImages)
+
+
 module.exports = router;

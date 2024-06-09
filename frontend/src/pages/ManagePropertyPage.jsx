@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import ManageProperty from '../components/ManageProperty';
 import { AdminContext } from '../context/AdminContext';
 import { useSelection } from '../hooks/use-selection';
+import axios from 'axios';
 
 export default function ManagePropertyPage() {
   const [page, setPage] = useState(0);
@@ -12,13 +13,28 @@ export default function ManagePropertyPage() {
   const { getApprovedProperties, rejectProperty } = useContext(AdminContext);
   const [rows, setRows] = useState([]);
   const [modifiedRows, setModifiedRows] = useState([]);
+  const placeholderAvatar = 'https://via.placeholder.com/150'; // Placeholder image URL  
 
   useEffect(() => {
     const fetchApprovedProperties = async () => {
-      const data = await getApprovedProperties();
-      setRows(data);
-      setModifiedRows(data);
-    }
+      try {
+        const data = await getApprovedProperties();
+
+        const fetchAvatars = data.map(async (property) => {
+          const response = await axios.post(`http://localhost:5000/api/property/images/${property.id}`);
+          const avatar = response.data.images[0]?.image || placeholderAvatar;
+          return { ...property, avatar };
+        });
+
+        const dataWithAvatars = await Promise.all(fetchAvatars);
+
+        setRows(dataWithAvatars);
+        setModifiedRows(dataWithAvatars);
+      } catch (error) {
+        console.error("Error fetching properties or avatars", error);
+      }
+    };
+
     fetchApprovedProperties();
   }, [getApprovedProperties]);
 

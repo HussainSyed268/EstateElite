@@ -112,7 +112,7 @@ export default function UserList({ users = [], sx }) {
                       <span>{user.id}</span>
                     </Stack>
                   </TableCell>
-                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{user.name}</TableCell>
                   <TableCell>{user.role}</TableCell>
                 </TableRow>
               );
