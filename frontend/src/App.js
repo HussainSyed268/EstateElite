@@ -46,7 +46,14 @@ function Main() {
     const location = useLocation();
     const { auth } = useContext(AuthContext);
     const isAdminRoute = location.pathname.startsWith('/admin');
-    const noFooterRoutes = ['/login', '/signup']; // Added '/admin' to noFooterRoutes
+    const noFooterRoutes = ['/login', 
+        '/signup',
+        '/admin',
+        '/admin/properties',
+        '/admin/users',
+        '/admin/account',
+        '/admin/approval',
+    ]; // Added '/admin' to noFooterRoutes
     const shouldHideFooter = noFooterRoutes.some(route => location.pathname.startsWith(route)); // Changed to .some()
 
     return (
@@ -89,7 +96,7 @@ function Main() {
                     )}
                 </Routes>
             </div>
-            {!shouldHideFooter || isAdminRoute && <Footer />} {/* Hide footer if on routes specified in noFooterRoutes */}
+            {!shouldHideFooter  && <Footer />} {/* Hide footer if on routes specified in noFooterRoutes */}
         </>
     );
 }
