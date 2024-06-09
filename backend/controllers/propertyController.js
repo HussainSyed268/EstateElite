@@ -310,6 +310,67 @@ exports.getAllApprovedProperties = async (req, res) => {
     }
 };
 
+// Rate a property
+exports.rateProperty = async (req, res) => {
+    const { propertyId, rating } = req.body;
+    console.log(req.body);
+
+    // Validate the rating value
+    if (rating < 0.0 || rating > 5.0) {
+        return res.status(400).json({ message: 'Rating must be between 0.0 and 5.0' });
+    }
+
+    try {
+        // Find the property by ID
+        const property = await Property.findByPk(propertyId);
+
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
+        }
+
+        console.log(property.rating, property.rating_count);
+
+        // Calculate the new rating and rating count
+        const newRatingCount = property.rating_count + 1;
+        const newRating = ((property.rating*property.rating_count) + rating) / newRatingCount;
+
+        // Update the property with the new rating and rating count
+        property.rating = newRating;
+        property.rating_count = newRatingCount;
+
+        console.log(property.rating, property.rating_count);
+
+
+
+        // Save the updated property
+        await property.save();
+
+        return res.status(200).json({ message: 'Rating submitted successfully', property });
+    } catch (error) {
+        console.error('Error rating property:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+//Get Rating of a property
+exports.getRating = async (req, res) => {
+    const { propertyId } = req.params;
+
+    try {
+        const property = await Property.findByPk(propertyId);
+
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
+        }
+
+        return res.status(200).json({ rating: property.rating });
+    } catch (error) {
+        console.error('Error getting property rating:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
 exports.getPropertyImages = async (req, res) => {
     try {
         const propertyId = req.params.id;
@@ -325,4 +386,4 @@ exports.getPropertyImages = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Failed to find property images' });
     }
-}
+

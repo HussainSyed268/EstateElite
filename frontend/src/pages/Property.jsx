@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect,useRef,useContext } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaHouse } from "react-icons/fa6";
 import { FaStairs } from "react-icons/fa6";
@@ -9,9 +9,12 @@ import { LiaChartAreaSolid } from "react-icons/lia";
 import PropertyCarousel from "../components/PropertyCarousel";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+import { AuthContext } from "../context/AuthContext";
+import Rating from '@mui/material/Rating';
 import * as PANOLENS from "panolens";
 
 const Property = () => {
+    const {auth} = useContext(AuthContext);
     const { propertyId } = useParams();
     const [property, setProperty] = useState(null);
     const [images, setImages] = useState([]);
@@ -20,7 +23,11 @@ const Property = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const panolensContainerRef = useRef(null);
+    const [rating, setRating] = useState(0);
+    const [userRating, setUserRating] = useState(0); //
     let viewer;
+
+    
 
 
 
@@ -32,11 +39,42 @@ const Property = () => {
         } catch (error) {
             console.error('Error fetching property details:', error);
         }
+    
+        try {
+            const response = await axios.post(`http://localhost:5000/api/save/check`, {
+                userId: auth.user.id,
+                propertyId: propertyId
+            });
+            setIsSaved(response.data.isSaved);
+        } catch (error) {
+            console.error('Error checking saved property:', error);
+        }
     };
-
     useEffect(() => {
         getPropertyDetails();
     }, [propertyId]);
+
+    const getPropertyRating = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/property/rating/${propertyId}`);
+            setRating(response.data.rating);
+        } catch (error) {
+            console.error('Error fetching property rating:', error);
+        }
+    };
+
+    const handleRatingChange = async (event, newRating) => {
+        setUserRating(newRating);
+        try {
+            await axios.post(`http://localhost:5000/api/property/rate`, {
+                propertyId: propertyId,
+                rating: newRating
+            });
+            getPropertyRating(); // Refresh the overall rating after submitting
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+        }
+    };
 
     useEffect(() => {
         const updateDisplayedImages = () => {
@@ -56,10 +94,32 @@ const Property = () => {
         return () => window.removeEventListener('resize', updateDisplayedImages);
     }, []);
 
-    const toggleSave = () => {
-        setIsSaved(!isSaved);
+    const toggleSave = async () => {
+        if (isSaved) {
+            // Unsave the property
+            try {
+                await axios.post(`http://localhost:5000/api/save/unsave`, {
+                    userId: auth.user.id,
+                    propertyId: propertyId
+                });
+                setIsSaved(false);
+            } catch (error) {
+                console.error('Error unsaving property:', error);
+            }
+        } else {
+            // Save the property
+            try {
+                await axios.post(`http://localhost:5000/api/save/save`, {
+                    userId: auth.user.id,
+                    propertyId: propertyId
+                });
+                setIsSaved(true);
+            } catch (error) {
+                console.error('Error saving property:', error);
+            }
+        }
     };
-
+    
 
   const initializePanolens = () => {
     const selectedImage = images[currentImageIndex];
@@ -224,11 +284,11 @@ const Property = () => {
                 </button>
 </div>
     </div>
-    <div className="mx-10 mt-2 font-raleway text-stone-500 text-[1.5rem]  max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
+    <div className="flex justify-between mx-10 mt-2 font-raleway text-stone-500 text-[1.5rem]  max-[706px]:text-[1.5rem] max-[546px]:text-[1rem]">
     <h>
         {capitalizeFLetter(property?.address)} - {capitalizeFLetter(property?.city)}, {capitalizeFLetter(property?.country)}
     </h>
-    
+    <Rating className="mr-8" name="half-rating" defaultValue={property.rating} onChange={handleRatingChange} precision={0.25} size="large"/>
 </div>
 
     <div className="grid xl:grid-cols-6 lg:grid-cols-3 sm:grid-cols-2  rounded-xl bg-slate-300 mt-12 mx-12 md:h-[15rem] lg:h-[12rem] xl:h-[8rem]">
