@@ -53,14 +53,16 @@ const unsaveProperty = async (req, res) => {
     }
 };
 
-// Get all saved properties for a user
 const getSavedProperties = async (req, res) => {
-    const { userId } = req.body;
+    const { userId } = req.params; // Changed to params to match the route
 
     try {
         const savedProperties = await SavedProperty.findAll({
             where: { user_id: userId },
-            include: [Property]
+            include: {
+                model: Property,
+                attributes: ['id', 'name', 'description', 'price', 'type', 'rating']
+            }
         });
 
         return res.status(200).json(savedProperties);

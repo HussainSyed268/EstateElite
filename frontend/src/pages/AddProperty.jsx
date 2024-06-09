@@ -9,6 +9,7 @@ import { GiStairs } from "react-icons/gi";
 import DragDrop from "../components/DragDrop";
 import DragDrop360 from "../components/DragDrop360";
 import { AuthContext } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const AddProperty = () => {
 
@@ -49,8 +50,23 @@ const AddProperty = () => {
         const base64Files = await Promise.all(Array.from(files).map(file => convertToBase64(file)));
         setPic360(base64Files);
     };
+    const validateForm = () => {
+        if (!propertyType || !name || !address || !city || !country || !listingReason || !description || !price || !area || !parkingSpace || pictures.length < 5) {
+            return false;
+        }
+        return true;
+    };
     
       const handleSubmit = async () => {
+
+        if (!validateForm()) {
+            toast.error('Please fill all fields and ensure there are at least 5 property images.', {
+                position: "bottom-right",
+            });
+            return;
+        }
+
+
         const images = [
           ...pictures.map((file) => ({ image: file, is360: false })),
           ...pic360.map((file) => ({ image: file, is360: true })),
@@ -87,14 +103,24 @@ const AddProperty = () => {
           });
     
           if (!response.ok) {
-            throw new Error("Failed to add property");
+            toast.error('An error occurred while adding the property', {
+                position: "bottom-right",
+            });
           }
     
           const result = await response.json();
-          alert(result.message);
+          
+          toast.success('Property added successfully!', {
+            position: "bottom-right",
+          });
+          handleReset()
+
         } catch (error) {
           console.error(error);
-          alert("An error occurred while adding the property");
+          toast.error('An error occurred while adding the property', {
+            position: "bottom-right",
+            });
+          
         }
       };
 
