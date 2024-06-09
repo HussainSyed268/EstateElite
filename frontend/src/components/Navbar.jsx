@@ -53,7 +53,7 @@ export default function Navbar() {
                         <Link to="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">About</Link>
                     </li>
                     <li>
-                        <Link to="/contact" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</Link>
+                        <Link to="/contact-us" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</Link>
                     </li>
                 </ul>
             </div>

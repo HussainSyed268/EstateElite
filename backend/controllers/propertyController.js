@@ -374,9 +374,10 @@ exports.getRating = async (req, res) => {
 exports.getPropertyImages = async (req, res) => {
     try {
         const propertyId = req.params.id;
-
         const images = await PropertyImages.findAll({
-            where: { property_id: propertyId },
+            where: { property_id: propertyId,
+                is360: false
+             },
             attributes: ['image'],
             limit: 1
         });
@@ -386,4 +387,21 @@ exports.getPropertyImages = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Failed to find property images' });
     }
+}
+
+exports.getTopRatedProperties = async (req, res) => {
+    try {
+        const properties = await Property.findAll({
+            where: { status: 'approved' },
+            order: [['rating', 'DESC']],
+            limit: 10,
+            attributes: ['id', 'name', 'price', 'description', 'type', 'rating']
+        });
+
+        res.status(200).json({ properties });
+    } catch (error) {
+        console.error('Error fetching top-rated properties:', error);
+        res.status(500).json({ error: 'Failed to fetch top-rated properties' });
+    }
+};
 

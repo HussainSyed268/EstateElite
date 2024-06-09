@@ -30,10 +30,12 @@ router.post('/all', propertyController.getAllApprovedProperties);
 // Route to rate a property
 router.post('/rate', propertyController.rateProperty);
 
+router.post('/top-rated-properties', propertyController.getTopRatedProperties);
+router.post('/images/:id', propertyController.getPropertyImages)
 // Route to get property rating 
 router.get('/rating/:id', propertyController.getRating);
 
-router.post('/images/:id', propertyController.getPropertyImages)
+
 
 
 
