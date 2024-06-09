@@ -20,6 +20,7 @@ import ManageUserPage from "./pages/ManageUserPage";
 import ContactUs from "./pages/ContactUs";
 import { ThemeProvider } from "@mui/system";
 import theme from "./theme";
+import About from './pages/About';
 
 import SavedProperties from './components/SavedProperties';
 import ListedProperties from './components/ListedProperties';
@@ -58,6 +59,7 @@ function Main() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Register />} />
+
                     {auth.user && auth.user.role === 'customer' && (
                         <>
                             <Route path="/" element={<Home />} />

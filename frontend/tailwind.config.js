@@ -1,4 +1,11 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require("tailwindcss/defaultTheme");
+ 
+const colors = require("tailwindcss/colors");
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
+
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -8,6 +15,17 @@ module.exports = {
       backgroundImage: {
         'custom-gradient': 'linear-gradient(52deg, rgba(196,225,234,1) 0%, rgba(222,222,213,1) 50%, rgba(247,217,190,1) 100%)',
       },
+      animation: {
+        scroll:
+          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
+      },
+      keyframes: {
+        scroll: {
+          to: {
+            transform: "translate(calc(-50% - 0.5rem))",
+          },
+        },
+      },
     },
     fontFamily: {
       roboto: ['Roboto', 'sans-serif'],
@@ -15,7 +33,7 @@ module.exports = {
       'philosopher': ['Philosopher', 'sans-serif'],
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"),addVariablesForColors],
 
   daisyui: {
     themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
@@ -29,3 +47,13 @@ module.exports = {
   },
 }
 
+function addVariablesForColors({ addBase, theme }) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}

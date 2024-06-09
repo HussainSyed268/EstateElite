@@ -26,6 +26,15 @@ router.get('/info/:id', propertyController.fetchPropertyDetails);
 
 router.post('/all', propertyController.getAllApprovedProperties);
 
-router.post('/images/:id', propertyController.getPropertyImages);
+
+// Route to rate a property
+router.post('/rate', propertyController.rateProperty);
+
+// Route to get property rating 
+router.get('/rating/:id', propertyController.getRating);
+
+router.post('/images/:id', propertyController.getPropertyImages)
+
+
 
 module.exports = router;

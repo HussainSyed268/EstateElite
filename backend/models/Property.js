@@ -85,6 +85,12 @@ const Property = sequelize.define('Property', {
             max: 5.0
         }
     },
+    // Number of people who have rated the property
+    rating_count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW

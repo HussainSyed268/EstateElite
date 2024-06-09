@@ -5,7 +5,7 @@ import Logo from '../assets/logoFin.png';
 
 const Footer = () => {
     return (
-        <footer className=" mt-0 bg-six shadow darkremoveg-gray-900 p-1 border-2 rounded-t-xl">
+        <footer className=" mt-0 bg-six shadow darkremoveg-gray-900 p-1 border-2 rounded-t-xl font-raleway">
         <div
             className="grid md:grid-cols-4 grid-cols-1 gap-4  w-full p-1 [&>ul]:border-gray-400 [&>ul]:border-l-2 [&>ul]:p-2 [&>ul>li]:text-one [&>ul>li]:font-bold [&>ul]:md:my-6 [&>ul]:my-0 [&>ul>li]:cursor-pointer">
             <div className=" flex md:justify-center items-center justify-start md:ml-0 ml-3">
@@ -13,25 +13,25 @@ const Footer = () => {
             </div>
             <ul className="flex flex-col h-24 [&>li]:my-2 justify-center ">
                 <li>
-                    <a href="/explore">
-                        <p>Explore Fundraisers</p>
+                    <a href="/find">
+                        <p>Find Property</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/raisefunds">
-                        <p>Start a Fundraiser</p>
+                    <a href="/add-property">
+                        <p>List Property</p>
                     </a>
                 </li>
             </ul>
             <ul className=" flex flex-col [&>li]:my-2 justify-center h-24">
                 <li>
-                    <a href="/charities">
-                        <p>Visit Non-profit Organizations</p>
+                    <a href="/about">
+                        <p>About</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/nearbyDonations">
-                        <p>Volunteer for Donation Drives</p>
+                    <a href="/contact-us">
+                        <p>Contact us</p>
                     </a>
                 </li>
             </ul>
