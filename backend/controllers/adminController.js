@@ -119,6 +119,17 @@ exports.getAllUsers = async (req, res) => {
     }
 }
 
+exports.getUserDetails = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const userProfile = await UserProfile.findOne({ where: { user_id: id } });
+        res.json({  userProfile });
+    } catch(error){
+        console.error('Failed to get user details:', error);
+        res.status(500).json({ error: 'Failed to get user details' });
+    }
+}
+
 exports.revokeUser = async (req, res) => {
     try{
         //Revoke User and delete his all properties and his user profile (if any)
