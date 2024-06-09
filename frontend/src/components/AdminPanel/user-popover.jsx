@@ -10,11 +10,47 @@ import Typography from '@mui/material/Typography';
 import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
 import { SignOut as SignOutIcon } from '@phosphor-icons/react/dist/ssr/SignOut';
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
+import { AuthContext } from '../../context/AuthContext';
 
 import { paths } from '../paths/paths';
 
 
 export function UserPopover({ anchorEl, onClose, open }) {
+
+  const { logout, getUserDetails } = React.useContext(AuthContext);
+
+  const [user, setUser] = React.useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+  });
+
+  React.useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userDetails = await getUserDetails();
+        if (userDetails && userDetails.userProfile) {
+          setUser({
+            firstName: userDetails.userProfile.first_name,
+            lastName: userDetails.userProfile.last_name,
+            email: userDetails.user.email,
+          });
+        } else {
+          // Handle the case where userDetails is undefined or does not have userProfile
+          console.error('User details not available');
+        }
+      } catch (error) {
+        console.error('Failed to fetch user details', error);
+      }
+    };
+    fetchUserDetails();
+  }, [getUserDetails]);
+
+  const handleLogout = () => {
+    onClose();
+    logout();
+    window.location = '/login';
+  }
   return (
     <Popover
       anchorEl={anchorEl}
@@ -24,9 +60,9 @@ export function UserPopover({ anchorEl, onClose, open }) {
       slotProps={{ paper: { sx: { width: '240px' } } }}
     >
       <Box sx={{ p: '16px 20px ' }}>
-        <Typography variant="subtitle1">Sofia Rivers</Typography>
+        <Typography variant="subtitle1">{`${user.firstName} ${user.lastName}`}</Typography>
         <Typography color="text.secondary" variant="body2">
-          sofia.rivers@devias.io
+        {user.email}
         </Typography>
       </Box>
       <Divider />
@@ -38,7 +74,7 @@ export function UserPopover({ anchorEl, onClose, open }) {
           </ListItemIcon>
           Profile
         </MenuItem>
-        <MenuItem >
+        <MenuItem component={Link} onClick={handleLogout}>
           <ListItemIcon>
             <SignOutIcon fontSize="var(--icon-fontSize-md)" />
           </ListItemIcon>

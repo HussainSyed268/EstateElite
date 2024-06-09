@@ -146,10 +146,12 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
                     />
                   </TableCell>
                   <TableCell>
-                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Avatar src={order.avatar} />
-                      <span>{order.id}</span>
-                    </Stack>
+                    <Link to={`/property/${order.id}`}>
+                      <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                        <Avatar src={order.avatar} />
+                        <span>{order.id}</span>
+                      </Stack>
+                    </Link>
                   </TableCell>
                   <TableCell>{order.customer.name}</TableCell>
                   <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
