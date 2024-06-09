@@ -79,10 +79,10 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    const UpdateUserDetails = async (email, contact, password, first_name, last_name) => {
+    const UpdateUserDetails = async (email, contact, password, first_name, last_name, current_password) => {
         try {
             const id = auth.user.id;
-            await axios.post('/api/users/update/' + id, { email, contact, password, first_name, last_name });
+            await axios.post('/api/users/update/' + id, { email, contact, password, first_name, last_name, current_password });
             toast.success('User details updated successfully', {
                 position: "bottom-right",
             });

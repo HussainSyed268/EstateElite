@@ -36,7 +36,7 @@ exports.UpdateUserDetails = async (req, res) => {
     try{
         const userId = req.params.id;
         console.log(req.body);
-        const { email, contact, password, first_name, last_name } = req.body;
+        const { email, contact, password, first_name, last_name, current_password } = req.body;
         const user = await User.findByPk(userId);
         // console.log(user);
         if (!user) {
@@ -52,7 +52,12 @@ exports.UpdateUserDetails = async (req, res) => {
         if(contact){
             userProfile.contact_number = contact;
         }
-        if(password){
+        if(password && current_password){
+
+            const isPasswordValid = await bcrypt.compare(current_password, user.password_hash);
+            if (!isPasswordValid) {
+                return res.status(400).json({ message: 'Invalid password' });
+            }
             const hashedPassword = await bcrypt.hash(password, 10);
             user.password_hash = hashedPassword;
         }

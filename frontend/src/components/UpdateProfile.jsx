@@ -78,6 +78,7 @@ const UpdateProfile = () => {
         email: data.user.email,
         phone: data.userProfile.contact_number,
         status: data.user.role,
+        oldPassword: '',
         newPassword: '',
         confirmPassword: '',
       });
@@ -110,7 +111,7 @@ const UpdateProfile = () => {
       toast.error('Passwords do not match');
       return;
     } else{
-    UpdateUserDetails(profile.email, profile.phone,profile.newPassword , profile.firstName, profile.lastName);
+    UpdateUserDetails(profile.email, profile.phone,profile.newPassword , profile.firstName, profile.lastName, profile.oldPassword);
     setDisplayName(`${profile.firstName} ${profile.lastName}`);
   }
 };
@@ -211,6 +212,19 @@ const UpdateProfile = () => {
           <Typography variant="h6">Password</Typography>
           <Divider />
           <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                id="oldPassword"
+                label="Old Password"
+                name="oldPassword"
+                type="password"
+                value={profile.oldPassword}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
+            </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"

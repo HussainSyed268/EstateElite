@@ -10,11 +10,20 @@ import Typography from '@mui/material/Typography';
 import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
 import { SignOut as SignOutIcon } from '@phosphor-icons/react/dist/ssr/SignOut';
 import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
+import { AuthContext } from '../../context/AuthContext';
 
 import { paths } from '../paths/paths';
 
 
 export function UserPopover({ anchorEl, onClose, open }) {
+
+  const {logout} = React.useContext(AuthContext);
+
+  const handleLogout = () => {
+    onClose();
+    logout();
+    window.location = '/login';
+  }
   return (
     <Popover
       anchorEl={anchorEl}
@@ -38,7 +47,7 @@ export function UserPopover({ anchorEl, onClose, open }) {
           </ListItemIcon>
           Profile
         </MenuItem>
-        <MenuItem >
+        <MenuItem component={Link} onClick={handleLogout}>
           <ListItemIcon>
             <SignOutIcon fontSize="var(--icon-fontSize-md)" />
           </ListItemIcon>

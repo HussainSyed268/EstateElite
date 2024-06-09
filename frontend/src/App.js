@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { AdminProvider } from './context/AdminContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import { AdminProvider, AdminContext } from './context/AdminContext';
 import Login from './pages/Login';
 import Register from './pages/Signup';
 import Home from './pages/Home';
@@ -45,38 +45,54 @@ function Main() {
     const location = useLocation();
     const isAdminRoute = location.pathname.startsWith('/admin');
     const noFooterRoutes = ['/login', '/signup'];
-
+    const { auth } = useContext(AuthContext);
     const shouldHideFooter = noFooterRoutes.includes(location.pathname);
+    const isLoginOrSignup = ['/login', '/signup'].includes(location.pathname);
+
 
     return (
         <>
-            {!isAdminRoute && <Navbar />}
+            {(auth.user && auth.user.role === "customer") &&  <Navbar />}
+            {isLoginOrSignup &&  <Navbar/>}
             <div className=''>
                 <Routes>
-                    <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Register />} />
-                    <Route path="/find" element={<Find />} />
-                    <Route path="/property/:propertyId" element={<Property />} />
-                    <Route path="/add-property" element={<AddProperty />} />
-                    <Route path="/savedproperties" element={<SavedProperties />} />
-                    <Route path="/listedproperties" element={<ListedProperties />} />
-                    <Route path="/updateprofile" element={<UpdateProfile />} />
-                    <Route path="/contact-us" element={<ContactUs />} />
-                    {/* <Route path="/logout" element={<Logout />} /> Create a Logout component or handle logout logic */}
-                    
-                    <Route path="/admin" element={<AdminLayout />}>
-                        <Route index element={<Dashboard />} />
-                        <Route path="properties" element={<ManagePropertyPage />} />
-                        <Route path="users" element={<ManageUserPage />} />
-                        <Route path="account" element={<UpdateProfile />} />
-                        <Route path="approval" element={<Approval />} />
-                    </Route>
+                    {auth.user && auth.user.role === 'customer' && (
+                        <>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/find" element={<Find />} />
+                            <Route path="/property/:propertyId" element={<Property />} />
+                            <Route path="/add-property" element={<AddProperty />} />
+                            <Route path="/savedproperties" element={<SavedProperties />} />
+                            <Route path="/listedproperties" element={<ListedProperties />} />
+                            <Route path="/updateprofile" element={<UpdateProfile />} />
+                            <Route path="/contact-us" element={<ContactUs />} />
+                            {/* if any other route than redirect back to home */}
+                            <Route path="*" element={<Home />} />
+                        </>
+                    )}
+
+                    {auth.user && auth.user.role === 'admin' && (
+                        <>
+                        <Route path="/property/:propertyId" element={<Property />} />
+                        <Route path="/admin/*" element={<AdminLayout />}>
+                            <Route index element={<Dashboard />} />
+                            <Route path="properties" element={<ManagePropertyPage />} />
+                            <Route path="users" element={<ManageUserPage />} />
+                            <Route path="account" element={<UpdateProfile />} />
+                            <Route path="approval" element={<Approval />} />
+                            {/* if any other route even outside admin than redirect back to admin */}
+                            <Route path="*" element={<Dashboard />} />
+                        </Route>
+                        </>
+                    )}
                 </Routes>
             </div>
-            {!isAdminRoute && !shouldHideFooter && <Footer />}
+            {auth.user && auth.user.role === "customer" && !shouldHideFooter && <Footer />}
         </>
     );
 }
+
 
 export default App;

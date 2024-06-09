@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = () => {
+
+    
     const generateError = (err) => {
         toast.error(err, {
             position: "bottom-right",
@@ -19,7 +21,8 @@ const Login = () => {
         });
     }
 
-    const { login } = useContext(AuthContext);
+    const { login, auth } = useContext(AuthContext);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -34,12 +37,15 @@ const Login = () => {
             if (localStorage.getItem('token')) {
                 generateSuccess("Logged in successfully");
                 setTimeout(() => {
-                    window.location = '/';
-                }
-                , 1500);
-    
+                    // Redirect based on user role
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if (user.role === 'admin') {
+                        window.location = '/admin';
+                    } else {
+                        window.location = '/';
+                    }
+                }, 1500);
             }
-            // window.location = '/';
         } catch (error) {
             generateError("Invalid username or password");
         }
