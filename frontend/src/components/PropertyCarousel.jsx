@@ -60,6 +60,7 @@ export default function PropertyCarousel(props) {
                                 rating={property.rating}
                                 price={property.price}
                                 type={property.type}
+                                id = {property.id}
                             />
                         </div>
                     ))}

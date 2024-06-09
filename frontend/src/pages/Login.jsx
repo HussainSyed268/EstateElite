@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Logo from '../assets/logo3.png';
@@ -50,6 +50,17 @@ const Login = () => {
             generateError("Invalid username or password");
         }
     };
+
+    useEffect(() => {
+        if (auth.user){
+            if (auth.user.role === 'admin'){
+                window.location = '/admin';
+            } else {
+                window.location = '/';
+            }
+        }
+    }
+    , [auth.user]);
 
     return (
         <section className="bg-white">
