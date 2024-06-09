@@ -60,7 +60,7 @@ const AdminProvider = ({ children }) => {
 
     const getAllUsers = async () => {
         try {
-            const response = await axios.get('/api/admin/users');
+            const response = await axios.post('/api/admin/users');
             return response.data;
         } catch (error) {
             console.error('Failed to get users:', error);

@@ -95,7 +95,7 @@ const Find = () => {
             <div className="flex flex-wrap justify-around gap-8 mx-8 mt-16 mb-8">
                 {currentCards.map((property) => (
                     <PropertyCard
-                        key={property.id}
+                        id={property.id}
                         img={property.img}
                         title={property.title}
                         description={property.description}
