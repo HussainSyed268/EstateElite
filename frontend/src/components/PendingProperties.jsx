@@ -29,14 +29,14 @@ const statusMap = {
 export default function PendingProperties({ orders: pendingOrders = [], sx }) {
   const { rejectProperty, approveProperty } = useContext(AdminContext);
 
-  const [modifiedOrders, setModifiedOrders] = useState([]);
+  const [modifiedOrders, setModifiedOrders] = useState(pendingOrders);
   const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(pendingOrders);
   const location = useLocation();
   const [maxItems, setMaxItems] = useState(5);
 
   const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < pendingOrders.length;
   const selectedAll = pendingOrders.length > 0 && selected?.size === pendingOrders.length;
-  
+
   // Determine whether to show the "View All" button based on the current path
   const showViewAllButton = location.pathname === '/admin';
 
@@ -45,9 +45,7 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
     Promise.all(selectedOrderIds.map(id => rejectProperty(id)))
       .then(() => {
         // Filter out the rejected properties
-        console.log(pendingOrders)
-        const updatedOrders = pendingOrders.filter(order => !selectedOrderIds.includes(order.id));
-        console.log(updatedOrders)
+        const updatedOrders = modifiedOrders.filter(order => !selectedOrderIds.includes(order.id));
         setModifiedOrders(updatedOrders); // Update modifiedOrders state to reflect changes
         console.log("Properties rejected successfully");
       })
@@ -56,13 +54,13 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
         // Handle error
       });
   };
-  
+
   const handleApprove = () => {
     const selectedOrderIds = Array.from(selected);
     Promise.all(selectedOrderIds.map(id => approveProperty(id)))
       .then(() => {
         // Filter out the approved properties
-        const updatedOrders = pendingOrders.filter(order => !selectedOrderIds.includes(order.id));
+        const updatedOrders = modifiedOrders.filter(order => !selectedOrderIds.includes(order.id));
         setModifiedOrders(updatedOrders); // Update modifiedOrders state to reflect changes
         console.log("Properties approved successfully");
       })
@@ -73,10 +71,8 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
   };
 
   useEffect(() => {
-    setModifiedOrders(modifiedOrders);
-  }, []);
-
-  
+    setModifiedOrders(pendingOrders);
+  }, [pendingOrders]);
 
   return (
     <Card sx={sx}>
@@ -85,10 +81,11 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
         {(selectedSome || selectedAll) && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', marginBottom: 2 }}>
             <Button 
-            sx={{ margin: 1 }} 
-            color="success" 
-            variant="contained"
-            onClick={handleApprove}>
+              sx={{ margin: 1 }} 
+              color="success" 
+              variant="contained"
+              onClick={handleApprove}
+            >
               Approve
             </Button>
             <Button
@@ -127,7 +124,7 @@ export default function PendingProperties({ orders: pendingOrders = [], sx }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pendingOrders.slice(0, showViewAllButton ? maxItems : pendingOrders.length).map((order) => {
+            {modifiedOrders.slice(0, showViewAllButton ? maxItems : modifiedOrders.length).map((order) => {
               const isSelected = selected?.has(order.id);
               const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
 
