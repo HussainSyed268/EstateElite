@@ -38,7 +38,7 @@ export default function Navbar() {
                     </svg>
                 </button>
             </div>
-            <div className="hidden lg:flex lg:items-center lg:space-x-5 mx-10">
+            <div className="hidden lg:flex lg:items-center lg:space-x-5 mx-10 flex-grow justify-center">
                 <ul className="flex flex-row space-x-5">
                     <li>
                         <Link to="/" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Home</Link>
@@ -56,25 +56,25 @@ export default function Navbar() {
                         <Link to="/contact-us" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</Link>
                     </li>
                 </ul>
+            </div>
+            <div className="hidden lg:flex lg:items-center space-x-2 mx-10">
                 {isAuthenticated ? (
-                    <div className="flex items-center space-x-2">
-                        <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                            <Avatar
-                                src={user.profile.profile_picture} // Use base64 profile picture
-                                sx={{ cursor: 'pointer' }}
-                                onClick={handleAvatarClick} // Attach click handler
-                            />
-                        </Stack>
-                    </div>
+                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+                        <Avatar
+                            src={user.profile.profile_picture} // Use base64 profile picture
+                            sx={{ cursor: 'pointer' }}
+                            onClick={handleAvatarClick} // Attach click handler
+                        />
+                    </Stack>
                 ) : (
-                    <div className="flex items-center space-x-2">
+                    <>
                         <Link to="/login">
                             <button className="px-4 h-10 font-semibold rounded-xl hover:text-white hover:bg-black transition-all">Log In</button>
                         </Link>
                         <Link to="/signup">
                             <button className="px-4 h-10 font-semibold rounded-xl bg-[#F9A826] hover:text-white hover:bg-black transition-all">Sign Up</button>
                         </Link>
-                    </div>
+                    </>
                 )}
             </div>
             {isOpen && (
