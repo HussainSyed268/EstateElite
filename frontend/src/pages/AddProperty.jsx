@@ -29,6 +29,7 @@ const AddProperty = () => {
     const [parkingSpace, setParkingSpace] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
+    const [isLand, SetIsLand] = useState(true)
     const { auth } = useContext(AuthContext);
   
 
@@ -192,7 +193,10 @@ const AddProperty = () => {
                     <p>Villa</p>
                 </div>
                 <div 
-                    onClick={() => setPropertyType("land")} 
+                    onClick={() => {
+                        setPropertyType("land");
+                        SetIsLand(false)
+                    }} 
                     className={`min-[650px]:col-span-1 max-[1550px]:w-[8rem] w-[9rem] border-2 ${propertyType === "land" ? 'border-black text-black' : 'border-gray-300 text-gray-400'} rounded-xl flex flex-col justify-center items-center cursor-pointer`}>
                     <GrMapLocation className="max-[625px]:w-8 max-[625px]:h-8 w-10 mb-4 h-10" />
                     <p>Land</p>
@@ -235,6 +239,8 @@ const AddProperty = () => {
 
                 </select>
             </div>
+        {isLand && 
+            <>
             <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
             Number of Storeys
             </h1>
@@ -247,11 +253,11 @@ const AddProperty = () => {
                 className="hidden peer"
                 checked={storeys === 1}
                 onChange={() => setStoreys(1)}
-            />
+                />
             <label
                 htmlFor="1storey"
                 className={`px-6 py-2  border rounded-full flex justify-center items-center cursor-pointer ${storeys === 1 ? 'bg-black text-white border-none' : 'bg-white text-black'}`}
-            >
+                >
                 1
                 <GiStairs className="ml-4"/>
             </label>
@@ -476,6 +482,8 @@ const AddProperty = () => {
             </label>
 
         </div>
+        </>
+}
         <div className="flex flex-wrap">
         <div>
         <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
