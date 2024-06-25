@@ -5,7 +5,7 @@ import Logo from '../assets/logoFin.png';
 
 const Footer = () => {
     return (
-        <footer className=" mt-0 bg-six shadow darkremoveg-gray-900 p-1 border-2 rounded-t-xl font-raleway">
+        <footer className=" mt-0 bg-[#F9A826] shadow darkremoveg-gray-900 p-1 border-2 rounded-t-xl font-raleway">
         <div
             className="grid md:grid-cols-4 grid-cols-1 gap-4  w-full p-1 [&>ul]:border-gray-400 [&>ul]:border-l-2 [&>ul]:p-2 [&>ul>li]:text-one [&>ul>li]:font-bold [&>ul]:md:my-6 [&>ul]:my-0 [&>ul>li]:cursor-pointer">
             <div className=" flex md:justify-center items-center justify-start md:ml-0 ml-3">

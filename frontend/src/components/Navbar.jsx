@@ -25,7 +25,7 @@ export default function Navbar() {
     const isAuthenticated = Boolean(token);
 
     return (
-        <nav className="relative flex justify-between items-center font-raleway z-10 bg-[#fafafa] text-[#242424] py-4 my-5 mx-4 rounded-xl">
+        <nav className="relative flex justify-between items-center font-raleway z-10 bg-[#F9A826] text-[#242424] py-4 my-5 mx-4 rounded-xl">
             <div className="logo font-bold mx-10">
                 <Link to="/">
                     <img src={Logo} alt="logo" className="w-[180px]" />
@@ -41,19 +41,19 @@ export default function Navbar() {
             <div className="hidden lg:flex lg:items-center lg:space-x-5 mx-10 flex-grow justify-center">
                 <ul className="flex flex-row space-x-5">
                     <li>
-                        <Link to="/" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Home</Link>
+                        <Link to="/" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-white">Home</Link>
                     </li>
                     <li>
-                        <Link to="/find" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">Find Property</Link>
+                        <Link to="/find" className="text-[#242424] hover:text-white text-[1rem] font-semibold transition-all">Find Property</Link>
                     </li>
                     <li>
-                        <Link to="/add-property" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">List Property</Link>
+                        <Link to="/add-property" className="text-[#242424] hover:text-white text-[1rem] font-semibold transition-all">List Property</Link>
                     </li>
                     <li>
-                        <Link to="/about" className="text-[#242424] hover:text-[#F9A826] text-[1rem] font-semibold transition-all">About</Link>
+                        <Link to="/about" className="text-[#242424] hover:text-white text-[1rem] font-semibold transition-all">About</Link>
                     </li>
                     <li>
-                        <Link to="/contact-us" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-[#F9A826]">Contact Us</Link>
+                        <Link to="/contact-us" className="text-[#242424] text-[1rem] font-semibold transition-all hover:text-white">Contact Us</Link>
                     </li>
                 </ul>
             </div>
