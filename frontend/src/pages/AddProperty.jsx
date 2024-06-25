@@ -51,7 +51,7 @@ const AddProperty = () => {
         setPic360(base64Files);
     };
     const validateForm = () => {
-        if (!propertyType || !name || !address || !city || !country || !listingReason || !description || !price || !area || !parkingSpace || pictures.length < 5) {
+        if (!propertyType || !name || !address || !city || !country || !listingReason || !description || !price || !area || parkingSpace==="" || pictures.length < 5) {
             return false;
         }
         return true;
