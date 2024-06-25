@@ -4,7 +4,7 @@ import User from '../assets/icons/user.png';
 import Approval from '../assets/icons/approval.png';
 import Settings from '../assets/icons/settings.png';
 import Menu from '../assets/icons/menu.png';
-import Logo from '../assets/logo/logo-black-yellow.png';
+import Logo from '../assets/logoFin.png';
 
 export default function Sidebar() {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -23,7 +23,7 @@ export default function Sidebar() {
                         <img src={Menu} alt="Menu" className="w-6 h-6 z-10" />
                     </button>
                     <div className={`sidebar-title mx-auto text-white text-3xl font-semibold transition-all duration-300 ${isExpanded ? 'block' : 'hidden'}`}>
-                        <img className="w-32 h-32" src={Logo} alt="BricksReal" />
+                        <img className="w-48" src={Logo} alt="BricksReal" />
                     </div>
                 </div>
                 <div className="sidebar-menu pl-5">
