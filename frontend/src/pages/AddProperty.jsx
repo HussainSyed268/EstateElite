@@ -196,6 +196,9 @@ const AddProperty = () => {
                     onClick={() => {
                         setPropertyType("land");
                         SetIsLand(false)
+                        setBathrooms(0)
+                        setBedrooms(0)
+                        setStoreys(0)
                     }} 
                     className={`min-[650px]:col-span-1 max-[1550px]:w-[8rem] w-[9rem] border-2 ${propertyType === "land" ? 'border-black text-black' : 'border-gray-300 text-gray-400'} rounded-xl flex flex-col justify-center items-center cursor-pointer`}>
                     <GrMapLocation className="max-[625px]:w-8 max-[625px]:h-8 w-10 mb-4 h-10" />

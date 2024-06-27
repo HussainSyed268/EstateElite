@@ -13,6 +13,8 @@ import { AuthContext } from "../context/AuthContext";
 import Rating from '@mui/material/Rating';
 import SellerDetailsModal from "../components/sellerDetailsModal";
 import * as PANOLENS from "panolens";
+import { toast } from "react-toastify";
+
 
 const Property = () => {
     const { auth } = useContext(AuthContext);
@@ -195,6 +197,20 @@ const Property = () => {
         return <div>Loading...</div>;
     }
 
+    const copyLink = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                toast.success("Link Copied to Clipboard",{
+                    position: "bottom-right",
+                })
+            })
+            .catch((error) => {
+                console.error('Error copying URL:', error);
+            });
+    };
+
+    
     return (
         <>
             {isModalOpen && (
@@ -246,6 +262,7 @@ const Property = () => {
         <div className="flex gap-4 mr-8">
         <button
                         className="flex items-center justify-center w-12 h-12 bg-white border-gray-400 border rounded-full text-gray-800 active:bg-gray-800 active:text-white"
+                        onClick={copyLink}
                     >
                         <svg
                             className="w-6 h-6"
