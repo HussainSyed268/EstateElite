@@ -175,19 +175,22 @@ const AddProperty = () => {
             </h1>
             <div className="max-[1550px]:h-[8rem] max-[650px]:flex max-[650px]:flex-wrap max-[650px]:gap-4 max-[625px]:h-[14rem] h-[9rem] min-[650px]:w-[45rem] min-[1450px]:w-[55rem] grid grid-cols-5 ">
                 <div 
-                    onClick={() => setPropertyType("house")} 
+                    onClick={() => {setPropertyType("house");
+                        SetIsLand(true);}} 
                     className={`min-[650px]:col-span-1 max-[1550px]:w-[8rem] w-[9rem] border-2 ${propertyType === "house" ? 'border-black text-black' : 'border-gray-300 text-gray-400'} rounded-xl flex flex-col justify-center items-center cursor-pointer`}>
                     <IoHomeOutline className="max-[625px]:w-8 max-[625px]:h-8 w-10 mb-4 h-10" />
                     <p>House</p>
                 </div>
                 <div 
-                    onClick={() => setPropertyType("apartment")} 
+                    onClick={() => {setPropertyType("apartment");
+                        SetIsLand(true);}} 
                     className={`min-[650px]:col-span-1 max-[1550px]:w-[8rem] w-[9rem] border-2 ${propertyType === "apartment" ? 'border-black text-black' : 'border-gray-300 text-gray-400'} rounded-xl flex flex-col justify-center items-center cursor-pointer`}>
                     <BsBuildings className="max-[625px]:w-8 max-[625px]:h-8 w-10 mb-4 h-10" />
                     <p>Apartment</p>
                 </div>
                 <div 
-                    onClick={() => setPropertyType("villa")} 
+                    onClick={() => {setPropertyType("villa");
+                        SetIsLand(true);}} 
                     className={`min-[650px]:col-span-1 max-[1550px]:w-[8rem] w-[9rem] border-2 ${propertyType === "villa" ? 'border-black text-black' : 'border-gray-300 text-gray-400'} rounded-xl flex flex-col justify-center items-center cursor-pointer`}>
                     <MdOutlineVilla className="max-[625px]:w-8 max-[625px]:h-8 w-10 mb-4 h-10" />
                     <p>Villa</p>
