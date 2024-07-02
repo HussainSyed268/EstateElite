@@ -28,6 +28,7 @@ const AddProperty = () => {
     const [listingReason, setListingReason] = useState("");
     const [parkingSpace, setParkingSpace] = useState("");
     const [description, setDescription] = useState("");
+    const [virtualTour, setVirtualTour] = useState("")
     const [price, setPrice] = useState("");
     const [isLand, SetIsLand] = useState(true)
     const { auth } = useContext(AuthContext);
@@ -52,7 +53,7 @@ const AddProperty = () => {
         setPic360(base64Files);
     };
     const validateForm = () => {
-        if (!propertyType || !name || !address || !city || !country || !listingReason || !description || !price || !area || parkingSpace==="" || pictures.length < 5) {
+        if (!propertyType || !name || !address || !city || !country || !listingReason || !description || !price || !virtualTour|| !area || parkingSpace==="" || pictures.length < 5) {
             return false;
         }
         return true;
@@ -78,6 +79,7 @@ const AddProperty = () => {
           name,
           description,
           price,
+          virtualTour,
           address,
           city,
           country,
@@ -142,6 +144,7 @@ const AddProperty = () => {
         setParkingSpace("");
         setDescription("");
         setPrice("");
+        setVirtualTour("");
       };
     
     useEffect(() => {
@@ -561,6 +564,20 @@ const AddProperty = () => {
             value={description}
             onChange={(e)=>{setDescription(e.target.value)}}
             placeholder="Enter property description" className="max-[750px]:w-full w-[80%] min-h-[10rem] resize-none border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
+        
+        <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
+            Virtual tour Link
+            </h1>
+            <div className="flex justify-between items-center w-[20.5rem]">
+            <input 
+            value={virtualTour}
+            onChange={(e)=>{setVirtualTour(e.target.value)}}
+             type="text" placeholder="Enter Link to your Virtual Tour" className="w-[20rem] border-2 border-gray-300 rounded-xl p-2 outline-black focus:outline" />
+             </div>
+             <p className="mt-2">
+                If you didn't have any Virtual Tour, then you can create it <a target="_blank" href="https://www.virtualtourscreator.com.au" className="text-black font-bold underline">here</a>
+             </p>
+
         <h1 className="text-[1.2rem] font-bold mt-8 mb-2">
             Quoted Price in PKR
             </h1> 

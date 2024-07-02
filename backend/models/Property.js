@@ -28,6 +28,10 @@ const Property = sequelize.define('Property', {
         type: DataTypes.DECIMAL,
         allowNull: false
     },
+    virtualTour: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     address: {
         type: DataTypes.STRING,
         allowNull: false

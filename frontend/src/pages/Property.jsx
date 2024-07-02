@@ -382,7 +382,12 @@ const Property = () => {
         <p className="font-raleway text-stone-500 text-[1.2rem]  mx-10 max-[706px]:text-[1.2rem] max-[546px]:text-[1rem]">
             {capitalizeFLetter(property?.description)}
             </p>
-
+    <h1 className="font-raleway text-[2rem] font-bold mx-10 mt-8 max-[706px]:text-[2rem] max-[546px]:text-[2rem]">
+            Virtual Tour Link
+        </h1>
+        <p className="font-raleway text-stone-500 text-[1.2rem]  mx-10 max-[706px]:text-[1.2rem] max-[546px]:text-[1rem]">
+            {property?.virtualTour}
+            </p>
         <div className="flex flex-col items-end mx-8">
         <h1 className="font-raleway text-stone-500 text-[1.2rem] font-bold mx-10 mt-8 max-[706px]:text-[1.2rem] max-[546px]:text-[1rem]">
         Seller's Quote
