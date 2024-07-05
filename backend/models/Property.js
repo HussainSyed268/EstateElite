@@ -77,7 +77,7 @@ const Property = sequelize.define('Property', {
         allowNull: false
     },
     type: {
-        type: DataTypes.ENUM('apartment', 'house', 'condo', 'land', 'commercial'),
+        type: DataTypes.ENUM('apartment', 'house', 'villa', 'land'),
         allowNull: false
     },
     rating: {
