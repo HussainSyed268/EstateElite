@@ -25,7 +25,7 @@ export default function Navbar() {
     const isAuthenticated = Boolean(token);
 
     return (
-        <nav className="relative flex justify-between items-center font-raleway z-10 bg-[#ffe4b7] text-[#242424] py-4 my-5 mx-4 rounded-xl">
+        <nav className="relative flex justify-between items-center font-raleway z-10 bg-[#fafafa] text-[#242424] py-8 my-5 mx-4 rounded-xl">
             <div className="logo font-bold mx-10">
                 <Link to="/">
                     <img src={Logo} alt="logo" className="w-[180px]" />

@@ -23,7 +23,7 @@ export default function Sidebar() {
                         <img src={Menu} alt="Menu" className="w-6 h-6 z-10" />
                     </button>
                     <div className={`sidebar-title mx-auto text-white text-3xl font-semibold transition-all duration-300 ${isExpanded ? 'block' : 'hidden'}`}>
-                        <img className="w-48" src={Logo} alt="BricksReal" />
+                        <img className="w-48" src={Logo} alt="EstateElite" />
                     </div>
                 </div>
                 <div className="sidebar-menu pl-5">

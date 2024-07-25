@@ -36,19 +36,19 @@ const testimonials = [
         <div class=" text-black  min-h-screen py-10 px-5">
         <div class="max-w-7xl mx-auto font-raleway">
         <div className="mx-8 mb-16 font-raleway text-center max-[1036px]:text-[3rem] text-[4rem] font-bold  mt-4 max-[706px]:text-[3rem] max-[706px]:text-center max-[546px]:text-[2rem]">
-                About <span className="text-[#F9A826] font-philosopher">BricksReal</span>
+                About <span className="text-[#F9A826] font-philosopher">EstateElite</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="flex flex-col justify-center">
-                    <h2 class="text-3xl font-semibold mb-4">Welcome to BricksReal</h2>
+                    <h2 class="text-3xl font-semibold mb-4">Welcome to EstateElite</h2>
                     <p class="mb-4">
-                        At BricksReal, we are dedicated to providing the best property management services. Our team of experienced professionals is here to help you find, list, and manage properties with ease and efficiency.
+                        At EstateElite, we are dedicated to providing the best property management services. Our team of experienced professionals is here to help you find, list, and manage properties with ease and efficiency.
                     </p>
                     <p class="mb-4">
                         We believe in transparency, reliability, and customer satisfaction. Whether you are looking for a new home or an investment property, we are here to assist you every step of the way.
                     </p>
                     <p class="mb-4">
-                        Our platform offers a seamless experience for property owners and seekers alike. Join us today and discover the BricksReal difference.
+                        Our platform offers a seamless experience for property owners and seekers alike. Join us today and discover the EstateElite difference.
                     </p>
                 </div>
                 <div class="flex justify-center">
